@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - "7.4"
+
+sudo: false
+
+git:
+  submodules: false
+
+env:
+    global:
+        - XDEBUG_MODE=coverage
+
+before_script:
+  - make install check
+
+script:
+  - make test

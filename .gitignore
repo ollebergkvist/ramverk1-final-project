@@ -1,0 +1,9 @@
+/.bin
+/build
+/cache
+/vendor
+memory::
+composer.lock
+.phpunit.result.cache
+/data/db.sqlite
+/data/backup
