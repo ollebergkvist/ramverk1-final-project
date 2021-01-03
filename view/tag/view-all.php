@@ -12,27 +12,18 @@ namespace Anax\View;
 // Gather incoming variables and use default values if not set
 $items = isset($items) ? $items : null;
 
-?><h1>Code Forum</h1>
+?><h1>Tags</h1>
 
 <?php if (!$items) : ?>
-    <p>There are no items to show.</p>
+<p>There are no items to show.</p>
 <?php
     return;
 endif;
 ?>
 
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Description</th>
-    </tr>
+<div>
     <?php foreach ($items as $item) : ?>
-    <tr>
-        <td>
-            <a href="<?= url("book/update/{$item->id}"); ?>"><?= $item->id ?></a>
-        </td>
-        <td><?= $item->name ?></td>
-        <td><?= $item->description ?></td>
-    </tr>
+    <a class="btn btn-secondary"
+        href="<?= url("tag/view/{$item->id}"); ?>"><?= $item->name ?></a>
     <?php endforeach; ?>
-</table>
+</div>

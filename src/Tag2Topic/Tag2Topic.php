@@ -1,18 +1,18 @@
 <?php
 
-namespace Olbe19\Tag;
+namespace Olbe19\Tag2Topic;
 
 use Anax\DatabaseActiveRecord\ActiveRecordModel;
 
 /**
  * A database driven model using the Active Record design pattern.
  */
-class Tag extends ActiveRecordModel
+class Tag2Topic extends ActiveRecordModel
 {
     /**
      * @var string $tableName name of the database table.
      */
-    protected $tableName = "Tags";
+    protected $tableName = "Tag2topic";
 
     /**
      * Columns in the table.
@@ -20,13 +20,14 @@ class Tag extends ActiveRecordModel
      * @var integer $id primary key auto incremented.
      */
     public $id;
-    public $name;
+    public $tag;
+    public $topic;
 
-    public function getTagNamesById($di, $id): array
+    public function getTagsForTopic($di, $topic): array
     {
-        $db = $di->get("db");
+        $db = $di->get("dbqb");
         $db->connect();
-        $sql = "SELECT name FROM Tags WHERE id = $id";
+        $sql = "SELECT tag FROM Tag2Topic WHERE topic = $topic";
         
         $result = $db->executeFetchAll($sql);
 

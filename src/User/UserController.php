@@ -72,6 +72,47 @@ class UserController implements ContainerInjectableInterface
         ]);
     }
 
+    public function viewActionGet() : object
+    {
+        // General framework setup
+        $page = $this->di->get("page");
+        $title = "Dashboard";
+        $session = $this->di->get("session");
+        $gravatar = new Gravatar();
+
+        // Get user data from session
+        $id = $session->get("id");
+        $username = $session->get("username");
+        $email = $session->get("email");
+        $password = $session->get("password");
+        $score = $session->get("score");
+        $level = $session->get("level");
+        $created = $session->get("created");
+
+        // Validate and get gravatar
+        if ($gravatar->validate_gravatar($email)) {
+            $gravatarUrl = $gravatar->gravatar_image($email, 200);
+        }
+
+        // Data to send to view
+        $data = [
+            "id" => $id ?? null,
+            "username" => $username ?? null,
+            "email" => $email ?? null,
+            "password" => $password ?? null,
+            "score" => $score ?? null,
+            "level" => $level ?? null,
+            "created" => $created ?? null,
+            "gravatarUrl" => $gravatarUrl ?? null
+        ];
+
+        $page->add("user/dashboard", $data);
+
+        return $page->render([
+            "title" => $title,
+        ]);
+    }
+
     /**
      * Description.
      *

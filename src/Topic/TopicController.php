@@ -8,6 +8,8 @@ use Olbe19\Topic\HTMLForm\CreateForm;
 use Olbe19\Topic\HTMLForm\EditForm;
 use Olbe19\Topic\HTMLForm\DeleteForm;
 use Olbe19\Topic\HTMLForm\UpdateForm;
+use Olbe19\Tag\Tag;
+use Olbe19\Tag2Topic\Tag2Topic;
 
 /**
  * A sample controller to show how a controller class can be implemented.
@@ -32,50 +34,84 @@ class TopicController implements ContainerInjectableInterface
             $topic = new Topic();
             $topic->setDb($this->di->get("dbqb"));
 
-             // Count number of topics
-            $sql = "SELECT COUNT(*) AS topic FROM Topics";
-            $db = $this->di->get("dbqb");
-            $db->connect();
-            $res = $db->executeFetch($sql);
-            $topics = $res->topic;
-            $number = range(1, $topics);
+            $topicsInCategory = $topic->findAllWhere($where, $value);
 
-            // Get number of posts in each topic
-            $sql = "SELECT COUNT(*) AS nrofposts FROM Posts WHERE topic = ?";
-            $db = $this->di->get("dbqb");
-            $postsArray = [];
+            $tag2topic = new Tag2Topic();
+            $tag2topic->setDb($this->di->get("dbqb"));
 
-            foreach ($number as $item) {
-                $param = [];
-                array_push($param, $item);
-                $db->connect();
-                $res = $db->executeFetch($sql, $param);
-                $nrOfPosts = $res->nrofposts;
-                array_push($postsArray, $nrOfPosts);
+
+            $result = [];
+
+            foreach ($topicsInCategory as $key => $value) {
+                $tags = $tag2topic->findAllWhereJoin(
+                    "Tag2Topic.topic = ?", // Where
+                    $topicsInCategory[$key]->id, // Value
+                    "Tags", // Table to join
+                    "Tags.id = Tag2Topic.tag", // Join on
+                    "Tag2Topic.*, Tags.name" // Select
+                );
+
+                array_push($result,
+                [
+                    "question" => $topicsInCategory[$key],
+                    "tags" => $tags,
+                    // "questionParsed" => $questionParsed,
+                    // "answerCount" => $answerCount[0]->count,
+                ]);
             }
 
-            // Insert number of posts into topics table
-            $sql = "UPDATE Topics SET posts = ? WHERE id = ?";
-            $db = $this->di->get("dbqb");
-            $index = 1;
+            var_dump($result);
 
-            foreach ($postsArray as $item) {
-                $params = [];
-                array_push($params, $item, $index);
-                $db->connect();
-                $res = $db->execute($sql, $params);
-                $index++;
-            }
+            // Topic Model
+            // $topicModel = $this->di->get("topicmodel");
+            // $nrOfPosts = $topicModel->getNumberOfPosts();
+
+            // // Count number of topics
+            // $sql = "SELECT COUNT(*) AS topic FROM Topics";
+            // $db = $this->di->get("dbqb");
+            // $db->connect();
+            // $res = $db->executeFetch($sql);
+            // $topics = $res->topic;
+            // $number = range(1, $topics);
+
+            // // Get number of posts in each topic
+            // $sql = "SELECT COUNT(*) AS nrofposts FROM Posts WHERE topic = ?";
+            // $db = $this->di->get("dbqb");
+            // $postsArray = [];
+
+            // foreach ($number as $item) {
+            //     $param = [];
+            //     array_push($param, $item);
+            //     $db->connect();
+            //     $res = $db->executeFetch($sql, $param);
+            //     $nrOfPosts = $res->nrofposts;
+            //     array_push($postsArray, $nrOfPosts);
+            // }
+
+            // var_dump($allTopics);
+
+            // // Insert number of posts into topics table
+            // $sql = "UPDATE Topics SET posts = ? WHERE id = ?";
+            // $db = $this->di->get("dbqb");
+            // $index = 1;
+
+            // foreach ($postsArray as $item) {
+            //     $params = [];
+            //     array_push($params, $item, $index);
+            //     $db->connect();
+            //     $res = $db->execute($sql, $params);
+            //     $index++;
+            // }
 
             $page->add("topic/crud/view-all", [
-                "items" => $topic->findAllWhere($where, $value),
+                "items" => $result,
             ]);
 
             return $page->render([
                 "title" => "Forum | Topics"
             ]);
         }
-        $this->di->get("response")->redirect("user/login");
+        // $this->di->get("response")->redirect("user/login");
     }
 
     /**

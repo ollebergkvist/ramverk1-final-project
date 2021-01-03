@@ -23,9 +23,19 @@ if (isset($_SESSION['username'])) {
                 "title" => "Forum.",
             ],
             [
-                "text" => "<i class='fas fa-user'></i> Profile",
+                "text" => "<i class='fas fa-tags'></i> Tags",
+                "url" => "tag",
+                "title" => "Tags.",
+            ],
+            [
+                "text" => "<i class='fas fa-user-secret'></i> Profile",
                 "url" => "user",
                 "title" => "Account.",
+            ],
+            [
+                "text" => "<i class='fas fa-info-circle'></i> About",
+                "url" => "about",
+                "title" => "About.",
             ],
             [
                 "text" => "<i class='fas fa-sign-out-alt'></i> Sign out",
@@ -76,9 +86,9 @@ if (isset($_SESSION['admin'])) {
                 "title" => "Post.",
             ],
             [
-                "text" => "Tag",
+                "text" => "<i class='fas fa-tags'></i> Tags",
                 "url" => "tag",
-                "title" => "Tag.",
+                "title" => "Tags.",
             ],
             [
                 "text" => "Logout",

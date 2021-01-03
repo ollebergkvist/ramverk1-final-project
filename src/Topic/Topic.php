@@ -24,5 +24,31 @@ class Topic extends ActiveRecordModel
     public $date;
     public $category;
     public $author;
-    public $tags;
+
+    public function getNumberOfPosts(): array
+    {
+        // Count number of topics
+        $sql = "SELECT COUNT(*) AS topic FROM Topics";
+        $db = $di->get("dbqb");
+        $db->connect();
+        $result = $db->executeFetch($sql);
+        $topics = $result->topic;
+        $number = range(1, $topics);
+
+        // Get number of posts in each topic
+        $sql = "SELECT COUNT(*) AS nrofposts FROM Posts WHERE topic = ?";
+        $db = $di->get("dbqb");
+        $postsArray = [];
+
+        foreach ($number as $item) {
+            $param = [];
+            array_push($param, $item);
+            $db->connect();
+            $result = $db->executeFetch($sql, $param);
+            $nrOfPosts = $result->nrofposts;
+            array_push($postsArray, $nrOfPosts);
+        }
+
+        return $postsArray;
+    }
 }
