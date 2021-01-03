@@ -39,7 +39,6 @@ class TopicController implements ContainerInjectableInterface
             $tag2topic = new Tag2Topic();
             $tag2topic->setDb($this->di->get("dbqb"));
 
-
             $result = [];
 
             foreach ($topicsInCategory as $key => $value) {
@@ -53,14 +52,11 @@ class TopicController implements ContainerInjectableInterface
 
                 array_push($result,
                 [
-                    "question" => $topicsInCategory[$key],
+                    "topic" => $topicsInCategory[$key],
                     "tags" => $tags,
-                    // "questionParsed" => $questionParsed,
-                    // "answerCount" => $answerCount[0]->count,
                 ]);
             }
 
-            var_dump($result);
 
             // Topic Model
             // $topicModel = $this->di->get("topicmodel");

@@ -50,12 +50,17 @@ endif;
         <tr>
             <td>
                 <a
-                    href="<?= url("topic/view/{$item->id}"); ?>"><?= $item->subject ?></a>
+                    href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= $item["topic"]->subject ?></a>
             </td>
-            <td><?= $item->date ?></td>
-            <td><?= $item->author ?></td>
-            <td><?= $item->tags ?></td>
-            <td><i class="far fa-comment"></i> <?= $item->posts ?></td>
+            <td><?= $item["topic"]->date ?></td>
+            <td><?= $item["topic"]->author ?></td>
+            <td>
+                <?php foreach ($item["tags"] as $tag) : ?>
+                <a class="btn btn-secondary btn-sm"
+                    href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
+                <?php endforeach; ?>
+            </td>
+            <!-- <td><i class="far fa-comment"></i> <?= $item->posts ?></td> -->
         </tr>
         <?php endforeach; ?>
     </tbody>
