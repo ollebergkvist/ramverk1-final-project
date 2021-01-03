@@ -35,6 +35,8 @@ Docker and docker-compose to run in containers.
 
 ## Clone repo
 
+Download repo.
+
 ```
 git clone https://github.com/ollebergkvist/ramverk1-final-project
 ```
@@ -62,8 +64,8 @@ bash db.bash
 Kindly open issues here.
 
 ```
+https://github.com/ollebergkvist/ramverk1-final-project/issues
 
-[Issues](https://github.com/ollebergkvist/ramverk1-weather-module/issues)
 ```
 
 ## License
