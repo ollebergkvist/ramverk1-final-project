@@ -23,7 +23,7 @@ class AboutController implements ContainerInjectableInterface
             $page = $this->di->get("page");
             $title = "About";
 
-            $page->add("about/about.php");
+            $page->add("about/about");
 
             return $page->render([
                 "title" => $title,

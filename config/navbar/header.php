@@ -18,7 +18,7 @@ if (isset($_SESSION['username'])) {
                 "title" => "Forum.",
             ],
             [
-                "text" => "<i class='fas fa-comments'></i> Discussion",
+                "text" => "<i class='fas fa-comments'></i> Forum",
                 "url" => "forum",
                 "title" => "Forum.",
             ],

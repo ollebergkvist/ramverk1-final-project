@@ -10,11 +10,7 @@ use Olbe19\User\HTMLForm\UserLogoutForm;
 use Olbe19\User\HTMLForm\CreateUserForm;
 use Olbe19\User\HTMLForm\UpdateForm;
 use Olbe19\User\HTMLForm\DeleteForm;
-
-
-// use Anax\Route\Exception\ForbiddenException;
-// use Anax\Route\Exception\NotFoundException;
-// use Anax\Route\Exception\InternalErrorException;
+use Olbe19\Topic\Topic;
 
 /**
  * A sample controller to show how a controller class can be implemented.
@@ -22,6 +18,20 @@ use Olbe19\User\HTMLForm\DeleteForm;
 class UserController implements ContainerInjectableInterface
 {
     use ContainerInjectableTrait;
+
+    /**
+     * The initialize method is optional and will always be called before the
+     * target method/action. This is a convenient method where you could
+     * setup internal properties that are commonly used by several methods.
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        $this->topic = new Topic();
+        $this->topic->setDb($this->di->get("dbqb"));
+    }
+
     /**
      * Description.
      *
@@ -115,22 +125,26 @@ class UserController implements ContainerInjectableInterface
 
     public function showActionGet($author) : object
     {   
-        var_dump($author);
-        // // General framework setup
-        // $page = $this->di->get("page");
-        // $title = "Dashboard";
-        // $session = $this->di->get("session");
+        // General framework setup
+        $page = $this->di->get("page");
+        $title = "Dashboard";
+        $session = $this->di->get("session");
 
-        // // Data to send to view
-        // $data = [
-        //     "posts" => $id ?? null,
-        // ];
+        // Get all posts by author
+        $posts = $this->topic->getPostsByAuthor($author);
 
-        // $page->add("user/view-all", $data);
 
-        // return $page->render([
-        //     "title" => $title,
-        // ]);
+        // Data to send to view
+        $data = [
+            "items" => $posts,
+            "author" => $author,
+        ];
+
+        $page->add("user/view-all", $data);
+
+        return $page->render([
+            "title" => $title,
+        ]);
     }
 
     /**

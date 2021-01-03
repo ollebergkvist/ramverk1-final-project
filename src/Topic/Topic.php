@@ -34,4 +34,14 @@ class Topic extends ActiveRecordExtended
 
         return $topics;
     }
+
+    public function getPostsByAuthor($value): array
+    {
+        $where = "author = ?";
+
+        return $this->findAllWhere(
+            $where, 
+            $value, 
+        );
+    }
 }
