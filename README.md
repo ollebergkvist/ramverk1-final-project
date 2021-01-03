@@ -9,7 +9,6 @@
 [![Build Status](https://scrutinizer-ci.com/g/ollebergkvist/ramverk1-final-project/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ollebergkvist/ramverk1-final-project/build-status/main)
 [![CircleCI](https://circleci.com/gh/ollebergkvist/ramverk1-final-project.svg?style=shield)](https://circleci.com/gh/ollebergkvist/ramverk1-final-project)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0aeba118582c2f3ce5c1/maintainability)](https://codeclimate.com/github/ollebergkvist/ramverk1-final-project/maintainability)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/384c5079a6aa493f814cb8283341206f)](https://www.codacy.com/gh/ollebergkvist/ramverk1-final-project/dashboard?utm_source=github.com&utm_medium=referral&utm_content=ollebergkvist/ramverk1-final-project&utm_campaign=Badge_Grade)
 
 ## Requirements
 
@@ -55,7 +54,6 @@ chmod 777 cache/*
 Initialize the database, create tables and insert default data.
 
 ```
-
 bash db.bash
 ```
 
@@ -65,14 +63,12 @@ Kindly open issues here.
 
 ```
 https://github.com/ollebergkvist/ramverk1-final-project/issues
-
 ```
 
 ## License
 
 This software carries a MIT license. See [LICENSE.txt](https://github.com/ollebergkvist/ramverk1-final-project/blob/main/LICENSE.txt) for details.
 
-```
- .
+```.
 ..:  Copyright (c) 2020 - Olle Bergkvist, hello@ollebergkvist.com
 ```
