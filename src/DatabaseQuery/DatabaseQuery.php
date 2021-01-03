@@ -80,8 +80,4 @@ class DatabaseQuery extends Database
 
         return parent::execute($query, $params);
     }
-
-    SELECT COUNT(*)
-FROM Topics
-WHERE category = 2;
 }

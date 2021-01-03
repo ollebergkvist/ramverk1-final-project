@@ -2,19 +2,18 @@
 
 namespace Olbe19\Post;
 
-use Anax\DatabaseActiveRecord\ActiveRecordModel;
+// use Anax\DatabaseActiveRecord\ActiveRecordModel;
+use Olbe19\ActiveRecordExtended\ActiveRecordExtended;
 
 /**
  * A database driven model using the Active Record design pattern.
  */
-class Post extends ActiveRecordModel
+class Post extends ActiveRecordExtended
 {
     /**
      * @var string $tableName name of the database table.
      */
     protected $tableName = "Posts";
-
-
 
     /**
      * Columns in the table.
@@ -26,4 +25,16 @@ class Post extends ActiveRecordModel
     public $date;
     public $topic;
     public $author;
+
+    public function getNumberOfPostsOfTopic($where): array
+    {
+        $topic = "topic = ?";
+        $count = "count(*) as count";
+
+        return $this->findAllWhere(
+            $topic, 
+            $where, 
+            $count
+        );
+    }
 }

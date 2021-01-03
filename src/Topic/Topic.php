@@ -2,12 +2,13 @@
 
 namespace Olbe19\Topic;
 
-use Anax\DatabaseActiveRecord\ActiveRecordModel;
+// use Anax\DatabaseActiveRecord\ActiveRecordModel;
+use Olbe19\ActiveRecordExtended\ActiveRecordExtended;
 
 /**
  * A database driven model using the Active Record design pattern.
  */
-class Topic extends ActiveRecordModel
+class Topic extends ActiveRecordExtended
 {
     /**
      * @var string $tableName name of the database table.
@@ -25,30 +26,12 @@ class Topic extends ActiveRecordModel
     public $category;
     public $author;
 
-    public function getNumberOfPosts(): array
+    public function getNumberOfTopics(): array
     {
-        // Count number of topics
-        $sql = "SELECT COUNT(*) AS topic FROM Topics";
-        $db = $di->get("dbqb");
-        $db->connect();
-        $result = $db->executeFetch($sql);
-        $topics = $result->topic;
-        $number = range(1, $topics);
+        $select = "count(*) as count";
 
-        // Get number of posts in each topic
-        $sql = "SELECT COUNT(*) AS nrofposts FROM Posts WHERE topic = ?";
-        $db = $di->get("dbqb");
-        $postsArray = [];
+        $topics = $this->findAll($select);
 
-        foreach ($number as $item) {
-            $param = [];
-            array_push($param, $item);
-            $db->connect();
-            $result = $db->executeFetch($sql, $param);
-            $nrOfPosts = $result->nrofposts;
-            array_push($postsArray, $nrOfPosts);
-        }
-
-        return $postsArray;
+        return $topics;
     }
 }
