@@ -60,7 +60,7 @@ endif;
                     href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
                 <?php endforeach; ?>
             </td>
-            <!-- <td><i class="far fa-comment"></i> <?= $item->posts ?></td> -->
+            <td><i class="far fa-comment"></i> <?= $item["posts"]->key  ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

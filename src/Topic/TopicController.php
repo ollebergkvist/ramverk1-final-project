@@ -41,50 +41,57 @@ class TopicController implements ContainerInjectableInterface
 
             $result = [];
 
-            foreach ($topicsInCategory as $key => $value) {
-                $tags = $tag2topic->findAllWhereJoin(
-                    "Tag2Topic.topic = ?", // Where
-                    $topicsInCategory[$key]->id, // Value
-                    "Tags", // Table to join
-                    "Tags.id = Tag2Topic.tag", // Join on
-                    "Tag2Topic.*, Tags.name" // Select
-                );
-
-                array_push($result,
-                [
-                    "topic" => $topicsInCategory[$key],
-                    "tags" => $tags,
-                ]);
-            }
-
-
             // Topic Model
             // $topicModel = $this->di->get("topicmodel");
             // $nrOfPosts = $topicModel->getNumberOfPosts();
 
-            // // Count number of topics
-            // $sql = "SELECT COUNT(*) AS topic FROM Topics";
-            // $db = $this->di->get("dbqb");
-            // $db->connect();
-            // $res = $db->executeFetch($sql);
-            // $topics = $res->topic;
-            // $number = range(1, $topics);
+            // Count number of topics
+            $sql = "SELECT COUNT(*) AS topic FROM Topics";
+            $db = $this->di->get("dbqb");
+            $db->connect();
+            $res = $db->executeFetch($sql);
+            $topics = $res->topic;
+            $number = range(1, $topics);
 
-            // // Get number of posts in each topic
-            // $sql = "SELECT COUNT(*) AS nrofposts FROM Posts WHERE topic = ?";
-            // $db = $this->di->get("dbqb");
-            // $postsArray = [];
+            // Get number of posts in each topic
+            $sql = "SELECT COUNT(*) AS nrofposts FROM Posts WHERE topic = ?";
+            $db = $this->di->get("dbqb");
+            $posts = [];
 
-            // foreach ($number as $item) {
-            //     $param = [];
-            //     array_push($param, $item);
-            //     $db->connect();
-            //     $res = $db->executeFetch($sql, $param);
-            //     $nrOfPosts = $res->nrofposts;
-            //     array_push($postsArray, $nrOfPosts);
+            foreach ($number as $item) {
+                $param = [];
+                array_push($param, $item);
+                $db->connect();
+                $res = $db->executeFetch($sql, $param);
+                $nrOfPosts = $res->nrofposts;
+                $posts["value"] = $nrOfPosts;
+                // array_push($posts, $nrOfPosts);
+            }
+
+            var_dump($posts);
+
+            // foreach ($posts as $item => $value) {
+            //     // var_dump($item);
+            //     var_dump($value);
             // }
 
-            // var_dump($allTopics);
+            // foreach ($topicsInCategory as $key => $value) {
+            //     $tags = $tag2topic->findAllWhereJoin(
+            //         "Tag2Topic.topic = ?", // Where
+            //         $topicsInCategory[$key]->id, // Value
+            //         "Tags", // Table to join
+            //         "Tags.id = Tag2Topic.tag", // Join on
+            //         "Tag2Topic.*, Tags.name" // Select
+            //     );
+
+            //     array_push($result,
+            //     [
+            //         "topic" => $topicsInCategory[$key],
+            //         "tags" => $tags,
+            //         "posts" => $posts,
+            //     ]);
+            // }
+
 
             // // Insert number of posts into topics table
             // $sql = "UPDATE Topics SET posts = ? WHERE id = ?";
@@ -99,13 +106,13 @@ class TopicController implements ContainerInjectableInterface
             //     $index++;
             // }
 
-            $page->add("topic/crud/view-all", [
-                "items" => $result,
-            ]);
+            // $page->add("topic/crud/view-all", [
+            //     "items" => $result,
+            // ]);
 
-            return $page->render([
-                "title" => "Forum | Topics"
-            ]);
+            // return $page->render([
+            //     "title" => "Forum | Topics"
+            // ]);
         }
         // $this->di->get("response")->redirect("user/login");
     }
