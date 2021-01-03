@@ -18,6 +18,8 @@ PHP 7.4 or newer version
 
 composer
 
+sqlite3
+
 git
 
 Not needed but recommended:
@@ -39,9 +41,36 @@ git clone https://github.com/ollebergkvist/ramverk1-final-project
 
 ## Setup
 
-Set up the environment and install dependencies
+Set up the environment and install dependencies.
 
 ```
 composer install
 chmod 777 cache/*
+```
+
+## Database
+
+Initialize the database, create tables and insert default data.
+
+```
+
+bash db.bash
+```
+
+## Issues
+
+Kindly open issues here.
+
+```
+
+[Issues](https://github.com/ollebergkvist/ramverk1-weather-module/issues)
+```
+
+## License
+
+This software carries a MIT license. See [LICENSE.txt](https://github.com/ollebergkvist/ramverk1-final-project/blob/main/LICENSE.txt) for details.
+
+```
+ .
+..:  Copyright (c) 2020 - Olle Bergkvist, hello@ollebergkvist.com
 ```
