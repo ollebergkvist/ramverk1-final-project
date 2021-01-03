@@ -15,7 +15,7 @@ class ActiveRecordExtended extends ActiveRecordModel
      *
      * @return array of object of this class
      */
-    public function findAll($select) 
+    public function findAll($select = "*") 
     {
         $this->checkDb();
         return $this->db->connect()

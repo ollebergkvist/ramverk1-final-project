@@ -3,11 +3,8 @@
 namespace Anax\View;
 
 /**
- * View to display all books.
+ * View to display all topics.
  */
-// Show all incoming variables/functions
-//var_dump(get_defined_functions());
-//echo showEnvironment(get_defined_vars());
 
 // Gather incoming variables and use default values if not set
 $items = isset($items) ? $items : null;
@@ -53,14 +50,16 @@ endif;
                     href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= $item["topic"]->subject ?></a>
             </td>
             <td><?= $item["topic"]->date ?></td>
-            <td><?= $item["topic"]->author ?></td>
+            <td><a
+                    href="<?= url("user/show/{$item["topic"]->author}"); ?>"><?= $item["topic"]->author ?></a>
+            </td>
             <td>
                 <?php foreach ($item["tags"] as $tag) : ?>
                 <a class="btn btn-secondary btn-sm"
                     href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
                 <?php endforeach; ?>
             </td>
-            <td><i class="far fa-comment"></i> <?= $item["posts"]->key  ?></td>
+            <td><i class="far fa-comment"></i> <?= $item["posts"] ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

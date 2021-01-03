@@ -113,6 +113,26 @@ class UserController implements ContainerInjectableInterface
         ]);
     }
 
+    public function showActionGet($author) : object
+    {   
+        var_dump($author);
+        // // General framework setup
+        // $page = $this->di->get("page");
+        // $title = "Dashboard";
+        // $session = $this->di->get("session");
+
+        // // Data to send to view
+        // $data = [
+        //     "posts" => $id ?? null,
+        // ];
+
+        // $page->add("user/view-all", $data);
+
+        // return $page->render([
+        //     "title" => $title,
+        // ]);
+    }
+
     /**
      * Description.
      *

@@ -21,7 +21,7 @@ class TopicController implements ContainerInjectableInterface
 
     /**
      * The initialize method is optional and will always be called before the
-     * target method/action. This is a convienient method where you could
+     * target method/action. This is a convenient method where you could
      * setup internal properties that are commonly used by several methods.
      *
      * @return void
@@ -53,29 +53,35 @@ class TopicController implements ContainerInjectableInterface
             $where = "category = ?";
             $topicsInCategory = $topic->findAllWhere($where, $value);
 
-            // Get number of topics
-            $nrOfTopics = $topic->getNumberOfTopics();
-
-            // Get number of posts of a topic
-            $nrOfPostsOfTopic = $this->post->getNumberOfPostsOfTopic("1");
-
             // Data to send to view
             $result = [];
 
             foreach ($topicsInCategory as $key => $value) {
+                // SQL
+                $where = "Tag2Topic.topic = ?";
+                $value = $topicsInCategory[$key]->id;
+                $table = "Tags";
+                $join = "Tags.id = Tag2Topic.tag";
+                $select = "Tag2Topic.*, Tags.name";
+
+                // Get tag names
                 $tags = $this->tag2topic->findAllWhereJoin(
-                    "Tag2Topic.topic = ?", // Where
-                    $topicsInCategory[$key]->id, // Value
-                    "Tags", // Table to join
-                    "Tags.id = Tag2Topic.tag", // Join on
-                    "Tag2Topic.*, Tags.name" // Select
+                    $where, 
+                    $value, 
+                    $table, 
+                    $join, 
+                    $select 
                 );
 
+                // Get number of posts of a topic
+                $nrOfPostsInTopic = $this->post->getNumberOfPostsOfTopic($topicsInCategory[$key]->id);
+
+                // Push combined data to $result array
                 array_push($result,
                 [
                     "topic" => $topicsInCategory[$key],
                     "tags" => $tags,
-                    "posts" => $posts,
+                    "posts" => $nrOfPostsInTopic[0]->count,
                 ]);
             }
 
@@ -84,10 +90,10 @@ class TopicController implements ContainerInjectableInterface
             ]);
 
             return $this->page->render([
-                "title" => "Forum | Topics"
+                "title" => "Topics"
             ]);
         }
-        // $this->di->get("response")->redirect("user/login");
+        $this->di->get("response")->redirect("user/login");
     }
 
     /**

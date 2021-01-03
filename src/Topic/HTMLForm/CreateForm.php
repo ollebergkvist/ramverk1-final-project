@@ -4,6 +4,7 @@ namespace Olbe19\Topic\HTMLForm;
 
 use Anax\HTMLForm\FormModel;
 use Psr\Container\ContainerInterface;
+use Olbe19\Category\Category;
 use Olbe19\Tag\Tag;
 use Olbe19\Topic\Topic;
 use Olbe19\Post\Post;
@@ -22,6 +23,18 @@ class CreateForm extends FormModel
     public function __construct(ContainerInterface $di)
     {
         parent::__construct($di);
+
+        // Retrieve categories from db
+        $category = new Category();
+        $category->setDb($this->di->get("dbqb"));
+        $categories = $category->findAll();
+        $categoriesArray = [];
+        
+        foreach ($categories as $category => $value) {
+            array_push($categoriesArray, $value->name);
+        }
+
+        array_unshift($categoriesArray, "Select a category...");
 
         // Retrieve tags from db
         $tag = new Tag();
@@ -42,7 +55,7 @@ class CreateForm extends FormModel
                 "category" => [
                     "type" => "select",
                     "class" => "form-control",
-                    "options" => ["", "General Discussion", "Get Help", "Show & Tell"],
+                    "options" => $categoriesArray,
                     "validation" => ["not_empty"],
                 ],
 
