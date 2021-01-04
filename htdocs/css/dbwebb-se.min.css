@@ -98,3 +98,7 @@ main {
 .btn-secondary {
 	background-color: #444 !important;
 }
+
+.gravatar {
+	border-radius: 50%;
+}

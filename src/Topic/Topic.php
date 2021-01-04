@@ -35,7 +35,7 @@ class Topic extends ActiveRecordExtended
         return $topics;
     }
 
-    public function getPostsByAuthor($value): array
+    public function getTopicsByAuthor($value): array
     {
         $where = "author = ?";
 

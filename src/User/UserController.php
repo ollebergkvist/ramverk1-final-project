@@ -11,6 +11,7 @@ use Olbe19\User\HTMLForm\CreateUserForm;
 use Olbe19\User\HTMLForm\UpdateForm;
 use Olbe19\User\HTMLForm\DeleteForm;
 use Olbe19\Topic\Topic;
+use Olbe19\Tag2Topic\Tag2Topic;
 
 /**
  * A sample controller to show how a controller class can be implemented.
@@ -30,6 +31,11 @@ class UserController implements ContainerInjectableInterface
     {
         $this->topic = new Topic();
         $this->topic->setDb($this->di->get("dbqb"));
+        $this->tag2topic = new Tag2Topic();
+        $this->tag2topic->setDb($this->di->get("dbqb"));
+        $this->gravatar = new Gravatar();
+        $this->page = $this->di->get("page");
+        $this->session = $this->di->get("session");
     }
 
     /**
@@ -44,81 +50,29 @@ class UserController implements ContainerInjectableInterface
     public function indexActionGet() : object
     {
         // General framework setup
-        $page = $this->di->get("page");
         $title = "Dashboard";
-        $session = $this->di->get("session");
-        $gravatar = new Gravatar();
-
-        // Get user data from session
-        $id = $session->get("id");
-        $username = $session->get("username");
-        $email = $session->get("email");
-        $password = $session->get("password");
-        $score = $session->get("score");
-        $level = $session->get("level");
-        $created = $session->get("created");
+        $email = $this->session->get("email");
 
         // Validate and get gravatar
-        if ($gravatar->validate_gravatar($email)) {
-            $gravatarUrl = $gravatar->gravatar_image($email, 200);
+        if ($this->gravatar->validate_gravatar($email)) {
+            $gravatarUrl = $this->gravatar->gravatar_image($email, 200);
         }
 
         // Data to send to view
         $data = [
-            "id" => $id ?? null,
-            "username" => $username ?? null,
+            "id" => $this->session->get("id") ?? null,
+            "username" => $this->session->get("username") ?? null,
             "email" => $email ?? null,
-            "password" => $password ?? null,
-            "score" => $score ?? null,
-            "level" => $level ?? null,
-            "created" => $created ?? null,
+            "password" => $this->session->get("password") ?? null,
+            "score" =>  $this->session->get("score") ?? null,
+            "level" => $this->session->get("level") ?? null,
+            "created" => $this->session->get("created") ?? null,
             "gravatarUrl" => $gravatarUrl ?? null
         ];
 
-        $page->add("user/dashboard", $data);
+        $this->page->add("user/dashboard", $data);
 
-        return $page->render([
-            "title" => $title,
-        ]);
-    }
-
-    public function viewActionGet() : object
-    {
-        // General framework setup
-        $page = $this->di->get("page");
-        $title = "Dashboard";
-        $session = $this->di->get("session");
-        $gravatar = new Gravatar();
-
-        // Get user data from session
-        $id = $session->get("id");
-        $username = $session->get("username");
-        $email = $session->get("email");
-        $password = $session->get("password");
-        $score = $session->get("score");
-        $level = $session->get("level");
-        $created = $session->get("created");
-
-        // Validate and get gravatar
-        if ($gravatar->validate_gravatar($email)) {
-            $gravatarUrl = $gravatar->gravatar_image($email, 200);
-        }
-
-        // Data to send to view
-        $data = [
-            "id" => $id ?? null,
-            "username" => $username ?? null,
-            "email" => $email ?? null,
-            "password" => $password ?? null,
-            "score" => $score ?? null,
-            "level" => $level ?? null,
-            "created" => $created ?? null,
-            "gravatarUrl" => $gravatarUrl ?? null
-        ];
-
-        $page->add("user/dashboard", $data);
-
-        return $page->render([
+        return $this->page->render([
             "title" => $title,
         ]);
     }
@@ -126,23 +80,48 @@ class UserController implements ContainerInjectableInterface
     public function showActionGet($author) : object
     {   
         // General framework setup
-        $page = $this->di->get("page");
         $title = "Dashboard";
-        $session = $this->di->get("session");
 
         // Get all posts by author
-        $posts = $this->topic->getPostsByAuthor($author);
+        $topics = $this->topic->getTopicsByAuthor($author);
 
+        // Data to send to view
+        $result = [];
+
+        foreach ($topics as $key => $value) {
+            // SQL
+            $where = "Tag2Topic.topic = ?";
+            $value = $topics[$key]->id;
+            $table = "Tags";
+            $join = "Tags.id = Tag2Topic.tag";
+            $select = "Tag2Topic.*, Tags.name";
+
+            // Get tag names
+            $tags = $this->tag2topic->findAllWhereJoin(
+                $where, 
+                $value, 
+                $table, 
+                $join, 
+                $select 
+            );
+
+            // Push combined data to $result array
+            array_push($result,
+            [
+                "author" => $author,
+                "topic" => $topics[$key],
+                "tags" => $tags,
+            ]);
+        }
 
         // Data to send to view
         $data = [
-            "items" => $posts,
-            "author" => $author,
+            "items" => $result,
         ];
 
-        $page->add("user/view-all", $data);
+        $this->page->add("user/view-all", $data);
 
-        return $page->render([
+        return $this->page->render([
             "title" => $title,
         ]);
     }
@@ -158,15 +137,14 @@ class UserController implements ContainerInjectableInterface
      */
     public function loginAction() : object
     {
-        $page = $this->di->get("page");
         $form = new UserLoginForm($this->di);
         $form->check();
 
-        $page->add("anax/v2/article/default", [
+        $this->page->add("anax/v2/article/default", [
             "content" => $form->getHTML(),
         ]);
 
-        return $page->render([
+        return $this->page->render([
             "title" => "Login",
         ]);
     }
@@ -182,15 +160,14 @@ class UserController implements ContainerInjectableInterface
      */
     public function logoutAction() : object
     {
-        $page = $this->di->get("page");
         $form = new UserLogoutForm($this->di);
         $form->check();
 
-        $page->add("anax/v2/article/default", [
+        $this->page->add("anax/v2/article/default", [
             "content" => $form->getHTML(),
         ]);
 
-        return $page->render([
+        return $this->page->render([
             "title" => "Logout",
         ]);
     }
@@ -206,15 +183,14 @@ class UserController implements ContainerInjectableInterface
      */
     public function createAction() : object
     {
-        $page = $this->di->get("page");
         $form = new CreateUserForm($this->di);
         $form->check();
 
-        $page->add("anax/v2/article/default", [
+        $this->page->add("anax/v2/article/default", [
             "content" => $form->getHTML(),
         ]);
 
-        return $page->render([
+        return $this->page->render([
             "title" => "Register account",
         ]);
     }
@@ -227,15 +203,14 @@ class UserController implements ContainerInjectableInterface
     public function deleteAction() : object
     {
         if (isset($_SESSION['username'])) {
-            $page = $this->di->get("page");
             $form = new DeleteForm($this->di);
             $form->check();
 
-            $page->add("user/crud/delete", [
+            $this->page->add("user/crud/delete", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Delete an item",
             ]);
         }
@@ -252,15 +227,14 @@ class UserController implements ContainerInjectableInterface
     public function updateAction(int $id) : object
     {
         if (isset($_SESSION['username'])) {
-            $page = $this->di->get("page");
             $form = new UpdateForm($this->di, $id);
             $form->check();
 
-            $page->add("user/crud/update", [
+            $this->page->add("user/crud/update", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Update an item",
             ]);
         }

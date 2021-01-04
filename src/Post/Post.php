@@ -37,4 +37,14 @@ class Post extends ActiveRecordExtended
             $count
         );
     }
+
+    public function getPostsByAuthor($value): array
+    {
+        $where = "author = ?";
+
+        return $this->findAllWhere(
+            $where, 
+            $value, 
+        );
+    }
 }

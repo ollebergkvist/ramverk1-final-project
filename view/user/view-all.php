@@ -12,7 +12,7 @@ $items = isset($items) ? $items : null;
 // Create urls for navigation
 $urlToCreate = url("topic/create");
 $urlToCategories = url("forum");
-$author = $items[0]->author;
+$author = $items[0]["author"];
 
 
 
@@ -38,9 +38,15 @@ endif;
         <tr>
             <td>
                 <a
-                    href="<?= url("topic/view/{$item->id}"); ?>"><?= $item->subject?></a>
+                    href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= $item["topic"]->subject?></a>
             </td>
-            <td><?= $item->date ?></td>
+            <td><?= $item["topic"]->date ?></td>
+            <td>
+                <?php foreach ($item["tags"] as $tag) : ?>
+                <a class="btn btn-secondary btn-sm"
+                    href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
+                <?php endforeach; ?>
+            </td>
         </tr>
         <?php endforeach; ?>
     </tbody>

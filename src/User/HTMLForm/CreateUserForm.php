@@ -92,8 +92,6 @@ class CreateUserForm extends FormModel
         $user->setPassword($password); // Save password
         $user->save(); // Save to db
 
-        $this->di->get("response")->redirect("forum");
-
-        // return true;
+        $this->di->get("response")->redirect("user/login");
     }
 }
