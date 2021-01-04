@@ -51,7 +51,9 @@ class TopicController implements ContainerInjectableInterface
             // Get all topics in category
             $value = $this->session->get("categoryID");
             $where = "category = ?";
-            $topicsInCategory = $topic->findAllWhere($where, $value);
+            $limit = "100";
+            // $topicsInCategory = $topic->findAllWhere($where, $value);
+            $topicsInCategory = $topic->getTopicsAndUserDetails($value);
 
             // Data to send to view
             $result = [];
@@ -93,7 +95,7 @@ class TopicController implements ContainerInjectableInterface
                 "title" => "Topics"
             ]);
         }
-        $this->di->get("response")->redirect("user/login");
+        // $this->di->get("response")->redirect("user/login");
     }
 
     /**
@@ -144,7 +146,7 @@ class TopicController implements ContainerInjectableInterface
      */
     public function deleteAction() : object
     {
-        if (isset($_SESSION['username'])) {
+        if ($_SESSION['permission'] === "admin") {
             $page = $this->di->get("page");
             $form = new DeleteForm($this->di);
             $form->check();

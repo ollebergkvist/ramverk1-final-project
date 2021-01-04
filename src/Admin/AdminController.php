@@ -18,7 +18,7 @@ class AdminController implements ContainerInjectableInterface
      * @return object as a response object
      */
     public function indexActionGet() : object
-    {
+    {   
         if ($_SESSION['permission'] === "admin") {
             $page = $this->di->get("page");
             $title = "admin";

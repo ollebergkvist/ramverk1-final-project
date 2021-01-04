@@ -2,6 +2,7 @@
     "favorites.resources": [
         "htdocs\\css\\dbwebb-se.min.css",
         "view\\topic\\crud\\view-all.php",
-        "vendor\\anax\\database-active-record\\src\\DatabaseActiveRecord\\ActiveRecordModel.php"
+        "vendor\\anax\\database-active-record\\src\\DatabaseActiveRecord\\ActiveRecordModel.php",
+        "src\\ActiveRecordExtended\\ActiveRecordExtended.php"
     ]
 }

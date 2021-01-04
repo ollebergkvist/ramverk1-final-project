@@ -44,4 +44,24 @@ class Topic extends ActiveRecordExtended
             $value, 
         );
     }
+
+    public function getTopicsAndUserDetails($value): array
+    {   
+        $order = "date DESC";
+        $table = "User";
+        $join = "Topics.author = User.username";
+        $limit = "1000";
+        $select = "Topics.*, User.username, User.email";
+
+        $topics = $this->findAllWhereJoinOrder(
+            $order, 
+            $table, 
+            $join, 
+            $value,
+            $limit, 
+            $select,
+        );
+
+        return $topics;
+    }
 }

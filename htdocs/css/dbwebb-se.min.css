@@ -26,6 +26,11 @@ html {
 	font-weight: 600;
 }
 
+.code {
+	font-family: 'Source Sans Pro', sans-serif !important;
+	font-weight: 500;
+}
+
 body,
 a {
 	font-family: 'Poppins', sans-serif !important;

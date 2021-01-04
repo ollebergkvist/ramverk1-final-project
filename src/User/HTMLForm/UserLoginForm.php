@@ -66,6 +66,7 @@ class UserLoginForm extends FormModel
         // Try to login (Active Record way)
         $user = new User();
         $user->setDb($this->di->get("dbqb"));
+
         $result = $user->verifyPassword($username, $password);
 
         if (!$result) {
@@ -75,27 +76,36 @@ class UserLoginForm extends FormModel
         }
 
         $session = $this->di->get("session");
+         // Store user details in variables
+            $id = $user->id;
+            $username = $user->username;
+            $email = $user->email;
+            $password = $user->password;
+            $score = $user->score;
+            $level = $user->level;
+            $created = $user->created;
+            $permission = $user->permission;
+            $username = $user->username;
+            $permission = $user->permission;
+        
+        if ($user->permission == "admin") {
+            $session->set("username", $username);
+            $session->set("permission", $permission);
+            $this->di->get("response")->redirect("admin");
+        }
+        
+        if ($user->permission == "user") {
+            // Store user details in session
+            $session->set("id", $id);
+            $session->set("username", $username);
+            $session->set("email", $email);
+            $session->set("password", $password);
+            $session->set("score", $score);
+            $session->set("level", $level);
+            $session->set("created", $created);
+            $session->set("permission", $permission);
 
-        // Store user details in variables
-        $id = $user->id;
-        $username = $user->username;
-        $email = $user->email;
-        $password = $user->password;
-        $score = $user->score;
-        $level = $user->level;
-        $created = $user->created;
-        $permission = $user->permission;
-
-        // Store user details in session
-        $session->set("id", $id);
-        $session->set("username", $username);
-        $session->set("email", $email);
-        $session->set("password", $password);
-        $session->set("score", $score);
-        $session->set("level", $level);
-        $session->set("created", $created);
-        $session->set("permission", $permission);
-
-        $this->di->get("response")->redirect("forum");
+            $this->di->get("response")->redirect("forum");
+        }
     }
 }

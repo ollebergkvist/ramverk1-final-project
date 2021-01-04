@@ -69,7 +69,7 @@ class CategoryController implements ContainerInjectableInterface
                 "title" => "Categories",
             ]);
         }
-        // $this->di->get("response")->redirect("user/login");
+        $this->di->get("response")->redirect("user/login");
     }
 
     /**

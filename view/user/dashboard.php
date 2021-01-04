@@ -4,12 +4,10 @@ namespace Anax\View;
 
 $urlToDeleteAccount = "hej";
 $urlToEditAccount = "tjo";
-
+$urlToAllPosts = "tjo";
 ?>
 
-
-
-<h1>Dashboard</h1>
+<h1><?= htmlentities($username)?>'s dashboard</h1>
 
 <p>
     <a class="btn btn-secondary" href="<?= $urlToEditAccount ?>"><i
@@ -17,7 +15,9 @@ $urlToEditAccount = "tjo";
     <a class="btn btn-secondary" href="<?= $urlToDeleteAccount?>"><i
             class="far fa-trash-alt"></i> Delete
         account</a>
-    <!-- <a href="<?= $urlToDelete ?>">Delete</a> -->
+    <a class="btn btn-secondary" href="<?= $urlToAllPosts?>"><i
+            class="far fa-comments"></i> Topics created
+    </a>
 </p>
 
 <p>Username: <?= htmlentities($username) ?></p>

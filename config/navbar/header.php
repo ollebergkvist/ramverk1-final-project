@@ -12,7 +12,7 @@ if (isset($_SESSION['username'])) {
         // Here comes the menu items
         "items" => [
             [
-                "text" => "<i class='fas fa-hat-wizard'></i> <span class='code'>Code</span> Wizards",
+                "text" => "<i class='fas fa-hat-wizard'></i> <span class='code'>Code</span>Wizards",
                 "class" => "logotype",
                 "url" => "forum",
                 "title" => "Forum.",

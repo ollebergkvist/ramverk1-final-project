@@ -2,6 +2,10 @@
 
 namespace Anax\View;
 
+use Olbe19\Gravatar\Gravatar;
+
+$gravatar = new Gravatar;
+
 /**
  * View to display all topics.
  */
@@ -38,6 +42,8 @@ endif;
             <th>Subject</th>
             <th>Date</th>
             <th>Author</th>
+            <th>Email</th>
+            <th>Gravatar</th>
             <th>Tags</th>
             <th>Posts</th>
         </tr>
@@ -54,8 +60,15 @@ endif;
                     href="<?= url("user/show/{$item["topic"]->author}"); ?>"><?= $item["topic"]->author ?></a>
             </td>
             <td>
+                <?= $item["topic"]->email ?>
+            </td>
+            <td>
+                <img
+                    src="<?=$gravatar->gravatar_image($item["topic"]->email)?>">
+            </td>
+            <td>
                 <?php foreach ($item["tags"] as $tag) : ?>
-                <a class="btn btn-secondary btn-sm"
+                <a class=" btn btn-secondary btn-sm"
                     href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
                 <?php endforeach; ?>
             </td>

@@ -50,4 +50,32 @@ class ActiveRecordExtended extends ActiveRecordModel
                         ->execute($params)
                         ->fetchAllClass(get_class($this));
     }
+
+    public function findAllWhereJoin($where, $value, $joinTable, $joinOn, $select = "*")
+    {
+        $this->checkDb();
+        $params = is_array($value) ? $value : [$value];
+        return $this->db->connect()
+            ->select($select ?? null)
+            ->from($this->tableName)
+            ->where($where)
+            ->join($joinTable, $joinOn)
+            ->execute($params)
+            ->fetchAllClass(get_class($this));
+    }
+
+    public function findAllWhereJoinOrder($order, $table, $join, $value, $limit = 100, $select = "*")
+    {
+        $this->checkDb();
+        $params = is_array($value) ? $value : [$value];
+        return $this->db->connect()
+            ->select($select)
+            ->from($this->tableName)
+            ->orderBy($order)
+            ->where("category = ?")
+            ->join($table, $join)
+            ->limit($limit)
+            ->execute($params)
+            ->fetchAllClass(get_class($this));
+    }
 }
