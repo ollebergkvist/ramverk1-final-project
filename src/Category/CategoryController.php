@@ -4,6 +4,9 @@ namespace Olbe19\Category;
 
 use Anax\Commons\ContainerInjectableInterface;
 use Anax\Commons\ContainerInjectableTrait;
+use Olbe19\Category\HTMLForm\CreateForm;
+use Olbe19\Category\HTMLForm\DeleteForm;
+use Olbe19\Category\HTMLForm\UpdateForm;
 use Anax\DatabaseQueryBuilder\DatabaseQueryBuilder;
 
 /**
@@ -86,7 +89,6 @@ class CategoryController implements ContainerInjectableInterface
             $session->set("categoryID", $id);
             $this->di->get("response")->redirect("topic");
         }
-
         // $this->di->get("response")->redirect("user/login");
     }
 
@@ -97,7 +99,7 @@ class CategoryController implements ContainerInjectableInterface
      */
     public function createAction() : object
     {
-        if ($_SESSION['admin'] === "admin") {
+        if ($_SESSION['permission'] === "admin") {
             $page = $this->di->get("page");
             $form = new CreateForm($this->di);
             $form->check();
@@ -120,7 +122,7 @@ class CategoryController implements ContainerInjectableInterface
      */
     public function deleteAction() : object
     {
-        if ($_SESSION['admin'] === "admin") {
+        if ($_SESSION['permission'] === "admin") {
             $page = $this->di->get("page");
             $form = new DeleteForm($this->di);
             $form->check();

@@ -5,7 +5,6 @@ namespace Olbe19\Topic;
 use Anax\Commons\ContainerInjectableInterface;
 use Anax\Commons\ContainerInjectableTrait;
 use Olbe19\Topic\HTMLForm\CreateForm;
-use Olbe19\Topic\HTMLForm\EditForm;
 use Olbe19\Topic\HTMLForm\DeleteForm;
 use Olbe19\Topic\HTMLForm\UpdateForm;
 use Olbe19\Post\Post;
@@ -171,7 +170,7 @@ class TopicController implements ContainerInjectableInterface
      */
     public function updateAction(int $id) : object
     {
-        if (isset($_SESSION['username'])) {
+        if ($_SESSION['permission'] === "admin") {
             $page = $this->di->get("page");
             $form = new UpdateForm($this->di, $id);
             $form->check();

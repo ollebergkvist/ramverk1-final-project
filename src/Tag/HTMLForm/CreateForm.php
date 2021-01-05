@@ -1,15 +1,15 @@
 <?php
 
-namespace Olbe19\Category\HTMLForm;
+namespace Olbe19\Tag\HTMLForm;
 
 use Anax\HTMLForm\FormModel;
 use Psr\Container\ContainerInterface;
-use Olbe19\Category\Category;
+use Olbe19\Tag\Tag;
 
 /**
- * Form to delete an item.
+ * Form to create an item.
  */
-class DeleteForm extends FormModel
+class CreateForm extends FormModel
 {
     /**
      * Constructor injects with DI container.
@@ -22,44 +22,23 @@ class DeleteForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Delete an item",
+                "legend" => "Details of tag",
             ],
             [
-                "select" => [
-                    "type"        => "select",
-                    "class" =>  "form-control",
-                    "label"       => "Select category to delete:",
-                    "options"     => $this->getAllItems(),
+                "name" => [
+                    "type" => "text",
+                    "class" => "form-control",
+                    "validation" => ["not_empty"],
                 ],
 
                 "submit" => [
                     "type" => "submit",
                     "class" => "btn btn-primary btn-block",
-                    "value" => "Delete category",
+                    "value" => "Create tag",
                     "callback" => [$this, "callbackSubmit"]
                 ],
             ]
         );
-    }
-
-
-
-    /**
-     * Get all items as array suitable for display in select option dropdown.
-     *
-     * @return array with key value of all items.
-     */
-    protected function getAllItems() : array
-    {
-        $category = new Category();
-        $category->setDb($this->di->get("dbqb"));
-
-        $categories = ["-1" => "Select a category.."];
-        foreach ($category->findAll() as $obj) {
-            $categories[$obj->id] = "{$obj->name} ({$obj->id})";
-        }
-
-        return $categories;
     }
 
 
@@ -72,10 +51,14 @@ class DeleteForm extends FormModel
      */
     public function callbackSubmit() : bool
     {
-        $category = new Category();
-        $category->setDb($this->di->get("dbqb"));
-        $category->find("id", $this->form->value("select"));
-        $category->delete();
+        // Tag query
+        $tag = new Tag();
+        $tag->setDb($this->di->get("dbqb"));
+
+        $tag->name = $this->form->value("name");
+
+        $tag->save();
+
         return true;
     }
 

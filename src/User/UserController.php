@@ -183,16 +183,19 @@ class UserController implements ContainerInjectableInterface
      */
     public function createAction() : object
     {
-        $form = new CreateUserForm($this->di);
-        $form->check();
 
-        $this->page->add("anax/v2/article/default", [
-            "content" => $form->getHTML(),
-        ]);
+        if ($_SESSION['permission'] === "admin") {
+            $form = new CreateUserForm($this->di);
+            $form->check();
 
-        return $this->page->render([
-            "title" => "Register account",
-        ]);
+            $this->page->add("anax/v2/article/default", [
+                "content" => $form->getHTML(),
+            ]);
+
+            return $this->page->render([
+                "title" => "Register account",
+            ]);
+        }
     }
 
     /**
@@ -202,7 +205,7 @@ class UserController implements ContainerInjectableInterface
      */
     public function deleteAction() : object
     {
-        if (isset($_SESSION['username'])) {
+        if ($_SESSION['permission'] === "admin") {
             $form = new DeleteForm($this->di);
             $form->check();
 

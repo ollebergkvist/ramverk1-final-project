@@ -22,21 +22,24 @@ class CreateForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Details of the item",
+                "legend" => "Details of the category",
             ],
             [
                 "name" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                 ],
 
                 "description" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                 ],
 
                 "submit" => [
                     "type" => "submit",
+                    "class" => "btn btn-primary btn-block",
                     "value" => "Create category",
                     "callback" => [$this, "callbackSubmit"]
                 ],
@@ -75,7 +78,7 @@ class CreateForm extends FormModel
      */
     public function callbackSuccess()
     {
-        $this->di->get("response")->redirect("category")->send();
+        $this->di->get("response")->redirect("forum")->send();
     }
 
 

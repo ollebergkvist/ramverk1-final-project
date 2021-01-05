@@ -1,10 +1,10 @@
 <?php
 
-namespace Olbe19\Category\HTMLForm;
+namespace Olbe19\Tag\HTMLForm;
 
 use Anax\HTMLForm\FormModel;
 use Psr\Container\ContainerInterface;
-use Olbe19\Category\Category;
+use Olbe19\Tag\Tag;
 
 /**
  * Form to delete an item.
@@ -22,27 +22,25 @@ class DeleteForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Delete an item",
+                "legend" => "Delete a tag",
             ],
             [
                 "select" => [
                     "type"        => "select",
-                    "class" =>  "form-control",
-                    "label"       => "Select category to delete:",
+                    "class"        => "form-control",
+                    "label"       => "Select tag to delete:",
                     "options"     => $this->getAllItems(),
                 ],
 
                 "submit" => [
                     "type" => "submit",
                     "class" => "btn btn-primary btn-block",
-                    "value" => "Delete category",
+                    "value" => "Delete tag",
                     "callback" => [$this, "callbackSubmit"]
                 ],
             ]
         );
     }
-
-
 
     /**
      * Get all items as array suitable for display in select option dropdown.
@@ -51,18 +49,16 @@ class DeleteForm extends FormModel
      */
     protected function getAllItems() : array
     {
-        $category = new Category();
-        $category->setDb($this->di->get("dbqb"));
+        $tag = new Tag();
+        $tag->setDb($this->di->get("dbqb"));
 
-        $categories = ["-1" => "Select a category.."];
-        foreach ($category->findAll() as $obj) {
-            $categories[$obj->id] = "{$obj->name} ({$obj->id})";
+        $tags = ["-1" => "Select a tag..."];
+        foreach ($tag->findAll() as $obj) {
+            $tags[$obj->id] = "{$obj->name} ({$obj->id})";
         }
 
-        return $categories;
+        return $tags;
     }
-
-
 
     /**
      * Callback for submit-button which should return true if it could
@@ -72,14 +68,12 @@ class DeleteForm extends FormModel
      */
     public function callbackSubmit() : bool
     {
-        $category = new Category();
-        $category->setDb($this->di->get("dbqb"));
-        $category->find("id", $this->form->value("select"));
-        $category->delete();
+        $tag = new Tag();
+        $tag->setDb($this->di->get("dbqb"));
+        $tag->find("id", $this->form->value("select"));
+        $tag->delete();
         return true;
     }
-
-
 
     /**
      * Callback what to do if the form was successfully submitted, this
@@ -88,10 +82,8 @@ class DeleteForm extends FormModel
      */
     public function callbackSuccess()
     {
-        $this->di->get("response")->redirect("admin")->send();
+        $this->di->get("response")->redirect("tag")->send();
     }
-
-
 
     // /**
     //  * Callback what to do if the form was unsuccessfully submitted, this

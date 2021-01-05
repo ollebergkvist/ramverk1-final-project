@@ -22,18 +22,20 @@ class DeleteForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Delete an item",
+                "legend" => "Delete a post",
             ],
             [
                 "select" => [
                     "type"        => "select",
-                    "label"       => "Select item to delete:",
+                    "class"        => "form-control",
+                    "label"       => "Select post to delete:",
                     "options"     => $this->getAllItems(),
                 ],
 
                 "submit" => [
                     "type" => "submit",
-                    "value" => "Delete item",
+                    "class" => "btn btn-primary btn-block",
+                    "value" => "Delete post",
                     "callback" => [$this, "callbackSubmit"]
                 ],
             ]
@@ -52,9 +54,9 @@ class DeleteForm extends FormModel
         $post = new Post();
         $post->setDb($this->di->get("dbqb"));
 
-        $posts = ["-1" => "Select an item..."];
+        $posts = ["-1" => "Select a post..."];
         foreach ($post->findAll() as $obj) {
-            $posts[$obj->id] = "{$obj->title} ({$obj->id})";
+            $posts[$obj->id] = "{$obj->content} ({$obj->id})";
         }
 
         return $posts;

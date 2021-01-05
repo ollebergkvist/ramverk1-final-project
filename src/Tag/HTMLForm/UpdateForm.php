@@ -1,10 +1,10 @@
 <?php
 
-namespace Olbe19\Category\HTMLForm;
+namespace Olbe19\Tag\HTMLForm;
 
 use Anax\HTMLForm\FormModel;
 use Psr\Container\ContainerInterface;
-use Olbe19\Category\Category;
+use Olbe19\Tag\Tag;
 
 /**
  * Form to update an item.
@@ -20,7 +20,7 @@ class UpdateForm extends FormModel
     public function __construct(ContainerInterface $di, $id)
     {
         parent::__construct($di);
-        $category = $this->getItemDetails($id);
+        $tag = $this->getItemDetails($id);
         $this->form->create(
             [
                 "id" => __CLASS__,
@@ -29,32 +29,28 @@ class UpdateForm extends FormModel
             [
                 "id" => [
                     "type" => "text",
+                    "class"        => "form-control",
                     "validation" => ["not_empty"],
                     "readonly" => true,
-                    "value" => $category->id,
+                    "value" => $tag->id,
                 ],
 
                 "name" => [
                     "type" => "text",
+                    "class"        => "form-control",
                     "validation" => ["not_empty"],
-                    "value" => $category->name,
-                ],
-
-                "description" => [
-                    "type" => "text",
-                    "validation" => ["not_empty"],
-                    "value" => $category->description,
+                    "value" => $tag->name,
                 ],
 
                 "submit" => [
                     "type" => "submit",
-                    "class" => "btn btn-primary btn-block",
+                    "class"        => "btn btn-primary btn-block",
                     "value" => "Save",
                     "callback" => [$this, "callbackSubmit"]
                 ],
 
                 "reset" => [
-                    "type" => "reset",
+                    "type"      => "reset",
                 ],
             ]
         );
@@ -67,14 +63,14 @@ class UpdateForm extends FormModel
      *
      * @param integer $id get details on item with id.
      *
-     * @return Category
+     * @return Tag
      */
     public function getItemDetails($id) : object
     {
-        $category = new Category();
-        $category->setDb($this->di->get("dbqb"));
-        $category->find("id", $id);
-        return $category;
+        $tag = new Tag();
+        $tag->setDb($this->di->get("dbqb"));
+        $tag->find("id", $id);
+        return $tag;
     }
 
 
@@ -87,12 +83,11 @@ class UpdateForm extends FormModel
      */
     public function callbackSubmit() : bool
     {
-        $category = new Category();
-        $category->setDb($this->di->get("dbqb"));
-        $category->find("id", $this->form->value("id"));
-        $category->name = $this->form->value("content");
-        $category->description = $this->form->value("description");
-        $category->save();
+        $tag = new Tag();
+        $tag->setDb($this->di->get("dbqb"));
+        $tag->find("id", $this->form->value("id"));
+        $tag->name = $this->form->value("name");
+        $tag->save();
         return true;
     }
 
