@@ -13,7 +13,7 @@ namespace Anax\View;
 $items = isset($items) ? $items : null;
 
 // Create urls for navigation
-$urlToViewItems = url("post");
+$urlToViewItems = url("admin");
 
 
 
@@ -22,5 +22,5 @@ $urlToViewItems = url("post");
 <?= $form ?>
 
 <p>
-    <a href="<?= $urlToViewItems ?>">View all</a>
+    <a href="<?= $urlToViewItems ?>">Return to admin dashboard</a>
 </p>

@@ -6,18 +6,18 @@ namespace Anax\View;
  * View to create a new post.
  */
 // Show all incoming variables/functions
-//var_dump(get_defined_functions());
-//echo showEnvironment(get_defined_vars());
+// var_dump(get_defined_functions());
+// echo showEnvironment(get_defined_vars());
 
 // Create urls for navigation
-$urlToView = url("post");
+$urlToView = url("admin");
 
 
 
-?><h1>Delete an item</h1>
+?><h1>Delete a tag</h1>
 
 <?= $form ?>
 
 <p>
-    <a href="<?= $urlToView ?>">View all</a>
+    <a href="<?= $urlToView ?>">Return to admin dashboard</a>
 </p>

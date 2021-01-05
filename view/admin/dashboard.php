@@ -26,14 +26,14 @@ $urlToDeleteUsers = url("user/delete");
 </p>
 <p>
     <a class="btn btn-secondary" href="<?= $urlToEditTopics ?>"><i
-            class="far fa-edit"></i> Edit topics</a>
+            class="far fa-edit"></i> Edit topic</a>
     <a class="btn btn-secondary" href="<?= $urlToDeleteTopics ?>"><i
-            class="far fa-trash-alt"></i> Delete topics</a>
+            class="far fa-trash-alt"></i> Delete topic</a>
 </p>
 <p><a class="btn btn-secondary" href="<?= $urlToEditPosts ?>"><i
-            class="far fa-edit"></i> Edit posts</a>
+            class="far fa-edit"></i> Edit post</a>
     <a class="btn btn-secondary" href="<?= $urlToDeletePosts ?>"><i
-            class="far fa-trash-alt"></i> Delete posts</a>
+            class="far fa-trash-alt"></i> Delete post</a>
 </p>
 <p>
     <a class="btn btn-secondary" href="<?= $urlToAddTags ?>"><i
@@ -44,5 +44,5 @@ $urlToDeleteUsers = url("user/delete");
             class="far fa-trash-alt"></i> Delete tag</a>
 </p>
 <p><a class="btn btn-secondary" href="<?= $urlToDeleteUsers?>"><i
-            class="far fa-trash-alt"></i> Delete users</a></p>
+            class="far fa-trash-alt"></i> Delete user</a></p>
 </p>

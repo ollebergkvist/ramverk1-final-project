@@ -3,7 +3,7 @@
  * Supply the basis for the navbar as an array.
  */
 
-if (isset($_SESSION['username'])) {
+if ($_SESSION['permission'] === "user") {
     return [
         // Use for styling the menu
         "wrapper" => null,
@@ -46,7 +46,7 @@ if (isset($_SESSION['username'])) {
     ];
 }
 
-if (isset($_SESSION['admin'])) {
+if ($_SESSION['permission'] === "admin") {
     return [
         // Use for styling the menu
         "wrapper" => null,
@@ -61,29 +61,9 @@ if (isset($_SESSION['admin'])) {
                 "title" => "Forum.",
             ],
             [
-                "text" => "Forum",
+                "text" => "<i class='fas fa-comments'></i> Forum",
                 "url" => "forum",
                 "title" => "Forum.",
-            ],
-            [
-                "text" => "Admin",
-                "url" => "admin",
-                "title" => "Admin.",
-            ],
-            [
-                "text" => "Account",
-                "url" => "user",
-                "title" => "Account.",
-            ],
-            [
-                "text" => "Topic",
-                "url" => "topic",
-                "title" => "Topic.",
-            ],
-            [
-                "text" => "Post",
-                "url" => "post",
-                "title" => "Post.",
             ],
             [
                 "text" => "<i class='fas fa-tags'></i> Tags",
@@ -91,7 +71,17 @@ if (isset($_SESSION['admin'])) {
                 "title" => "Tags.",
             ],
             [
-                "text" => "Logout",
+                "text" => "<i class='fas fa-user-ninja'></i> Admin",
+                "url" => "admin",
+                "title" => "Admin.",
+            ], 
+            [
+                "text" => "<i class='fas fa-info-circle'></i> About",
+                "url" => "about",
+                "title" => "About.",
+            ],
+            [
+                "text" => "<i class='fas fa-sign-out-alt'></i> Sign out",
                 "url" => "user/logout",
                 "title" => "Logout.",
             ],

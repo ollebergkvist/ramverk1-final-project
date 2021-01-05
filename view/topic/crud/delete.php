@@ -10,7 +10,7 @@ namespace Anax\View;
 //echo showEnvironment(get_defined_vars());
 
 // Create urls for navigation
-$urlToView = url("topic");
+$urlToView = url("admin");
 
 
 
@@ -19,5 +19,5 @@ $urlToView = url("topic");
 <?= $form ?>
 
 <p>
-    <a href="<?= $urlToView ?>">View all</a>
+    <a href="<?= $urlToView ?>">Return to admin dashboard</a>
 </p>

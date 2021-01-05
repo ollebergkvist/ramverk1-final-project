@@ -22,18 +22,20 @@ class DeleteForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Delete an item",
+                "legend" => "Delete a user",
             ],
             [
                 "select" => [
                     "type"        => "select",
-                    "label"       => "Select item to delete:",
+                    "class"        => "form-control",
+                    "label"       => "Select user to delete:",
                     "options"     => $this->getAllItems(),
                 ],
 
                 "submit" => [
                     "type" => "submit",
-                    "value" => "Delete item",
+                    "class"        => "btn btn-primary btn-block",
+                    "value" => "Delete user",
                     "callback" => [$this, "callbackSubmit"]
                 ],
             ]
@@ -52,7 +54,7 @@ class DeleteForm extends FormModel
         $user = new User();
         $user->setDb($this->di->get("dbqb"));
 
-        $users = ["-1" => "Select an item..."];
+        $users = ["-1" => "Select a user..."];
         foreach ($user->findAll() as $obj) {
             $users[$obj->id] = "{$obj->username} ({$obj->id})";
         }
