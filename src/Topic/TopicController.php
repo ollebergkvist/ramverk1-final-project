@@ -10,6 +10,7 @@ use Olbe19\Topic\HTMLForm\UpdateForm;
 use Olbe19\Post\Post;
 use Olbe19\Tag\Tag;
 use Olbe19\Tag2Topic\Tag2Topic;
+use Olbe19\Gravatar\Gravatar;
 
 /**
  * A sample controller to show how a controller class can be implemented.
@@ -33,6 +34,7 @@ class TopicController implements ContainerInjectableInterface
         $this->tag2topic->setDb($this->di->get("dbqb"));
         $this->session = $this->di->get("session");
         $this->page = $this->di->get("page");
+        $this->gravatar = new Gravatar;
     }
 
     /**
@@ -51,7 +53,6 @@ class TopicController implements ContainerInjectableInterface
             $value = $this->session->get("categoryID");
             $where = "category = ?";
             $limit = "100";
-            // $topicsInCategory = $topic->findAllWhere($where, $value);
             $topicsInCategory = $topic->getTopicsAndUserDetails($value);
 
             // Data to send to view
@@ -81,6 +82,7 @@ class TopicController implements ContainerInjectableInterface
                 array_push($result,
                 [
                     "topic" => $topicsInCategory[$key],
+                    "gravatar" => $this->gravatar->gravatar_image($topicsInCategory[$key]->email), 
                     "tags" => $tags,
                     "posts" => $nrOfPostsInTopic[0]->count,
                 ]);
@@ -94,7 +96,7 @@ class TopicController implements ContainerInjectableInterface
                 "title" => "Topics"
             ]);
         }
-        // $this->di->get("response")->redirect("user/login");
+        $this->di->get("response")->redirect("user/login");
     }
 
     /**

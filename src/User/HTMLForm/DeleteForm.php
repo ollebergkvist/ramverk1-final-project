@@ -21,7 +21,7 @@ class DeleteForm extends FormModel
         parent::__construct($di);
         $this->form->create(
             [
-                "id" => __CLASS__,
+                "username" => __CLASS__,
                 "legend" => "Delete a user",
             ],
             [
@@ -34,15 +34,13 @@ class DeleteForm extends FormModel
 
                 "submit" => [
                     "type" => "submit",
-                    "class"        => "btn btn-primary btn-block",
+                    "class" => "btn btn-primary btn-block",
                     "value" => "Delete user",
                     "callback" => [$this, "callbackSubmit"]
                 ],
             ]
         );
     }
-
-
 
     /**
      * Get all items as array suitable for display in select option dropdown.
@@ -56,13 +54,11 @@ class DeleteForm extends FormModel
 
         $users = ["-1" => "Select a user..."];
         foreach ($user->findAll() as $obj) {
-            $users[$obj->id] = "{$obj->username} ({$obj->id})";
+            $users[$obj->username] = "{$obj->username}";
         }
 
         return $users;
     }
-
-
 
     /**
      * Callback for submit-button which should return true if it could
@@ -72,14 +68,12 @@ class DeleteForm extends FormModel
      */
     public function callbackSubmit() : bool
     {
-        $user = new User();
-        $user->setDb($this->di->get("dbqb"));
-        $user->find("id", $this->form->value("select"));
-        $user->delete();
+        $tag = new User();
+        $tag->setDb($this->di->get("dbqb"));
+        $tag->find("username", $this->form->value("select"));
+        $tag->delete($this->form->value("select"), "username");
         return true;
     }
-
-
 
     /**
      * Callback what to do if the form was successfully submitted, this
@@ -88,10 +82,8 @@ class DeleteForm extends FormModel
      */
     public function callbackSuccess()
     {
-        $this->di->get("response")->redirect("user")->send();
+        $this->di->get("response")->redirectSelf()->send();
     }
-
-
 
     // /**
     //  * Callback what to do if the form was unsuccessfully submitted, this

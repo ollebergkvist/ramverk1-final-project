@@ -2,6 +2,10 @@
 
 namespace Anax\View;
 
+use Olbe19\Filter\Markdown;
+
+$markdown = new Markdown();
+
 /**
  * View to display all posts.
  */
@@ -31,18 +35,12 @@ endif;
 ?>
 
 <table class="table">
-    <tr>
-        <!-- <th>ID</th> -->
-        <!-- <th>Content</th>
-        <th>Date</th>
-        <th>Author</th> -->
-    </tr>
     <?php foreach ($items as $item) : ?>
     <tr>
         <!-- <td>
             <a href="<?= url("post/update/{$item->id}"); ?>"><?= $item->id ?></a>
         </td> -->
-        <td><?= $item->content ?></td>
+        <td><?= $markdown->markdown($item->content); ?></td>
         <td><?= $item->date ?></td>
         <td><?= $item->author ?></td>
     </tr>

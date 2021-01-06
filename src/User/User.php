@@ -19,7 +19,6 @@ class User extends ActiveRecordModel
      *
      * @var integer $id primary key auto incremented.
      */
-    public $id;
     public $username;
     public $email;
     public $password;
@@ -60,7 +59,7 @@ class User extends ActiveRecordModel
         return password_verify($password, $this->password);
     }
 
-    public function getEmailByName($value): array
+    public function getEmailByName($value): object
     {   
         $select = "email";
         $where = "username = ?";

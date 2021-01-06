@@ -2,27 +2,14 @@
 
 namespace Anax\View;
 
-
 /**
- * View to display all topics.
+ * View to display all categories.
  */
 
 // Gather incoming variables and use default values if not set
 $items = isset($items) ? $items : null;
 
-// Create urls for navigation
-$urlToCreate = url("topic/create");
-$urlToCategories = url("forum");
-
-?><h1 class="text-center">Topics</h1>
-
-<p>
-    <a class="btn btn-secondary" href="<?= $urlToCategories ?>"><i
-            class="fas fa-hand-point-left"></i> Categories</a>
-    <a class="btn btn-secondary" href="<?= $urlToCreate ?>">Start a
-        discussion</a>
-    <!-- <a href="<?= $urlToDelete ?>">Delete</a> -->
-</p>
+?><h1 class="text-center"><?= $items[0]["tagName"] ?></h1>
 
 <?php if (!$items) : ?>
 <p>There are no items to show.</p>
@@ -34,11 +21,11 @@ endif;
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>Subject</th>
+            <th>Topic</th>
             <th>Date</th>
             <th>Author</th>
             <th>Gravatar</th>
-            <th>Tags</th>
+            <!-- <th>Tags</th> -->
             <th>Posts</th>
         </tr>
     </thead>
@@ -54,14 +41,14 @@ endif;
                     href="<?= url("user/show/{$item["topic"]->author}"); ?>"><?= $item["topic"]->author ?></a>
             </td>
             <td>
-                <img src="<?=$item["gravatar"] ?>">
+                <img src=" <?=$item["gravatar"] ?>">
             </td>
-            <td>
+            <!-- <td>
                 <?php foreach ($item["tags"] as $tag) : ?>
                 <a class=" btn btn-secondary btn-sm"
                     href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
                 <?php endforeach; ?>
-            </td>
+            </td> -->
             <td><i class="far fa-comment"></i> <?= $item["posts"] ?></td>
         </tr>
         <?php endforeach; ?>

@@ -64,4 +64,39 @@ class Topic extends ActiveRecordExtended
 
         return $topics;
     }
+
+    public function getUserDetailsSingleTopic($value): array
+    {   
+        $order = "date DESC";
+        $table = "User";
+        $join = "Topics.author = User.username";
+        $limit = "1000";
+        $select = "Topics.*, User.username, User.email";
+
+        $topics = $this->findWhereJoin(
+            $order, 
+            $table, 
+            $join, 
+            $value,
+            $limit, 
+            $select,
+        );
+
+        return $topics;
+    }
+
+
+    public function findWhereJoin($where, $value, $select = "*") : object
+    {
+        $this->checkDb();
+        $params = is_array($value) ? $value : [$value];
+        $this->db->connect()
+                    ->select($select)
+                    ->from($this ->tableName)
+                    ->where($where)
+                    ->join($joinTable, $joinOn)
+                    ->execute($params)
+                    ->fetchInto($this);
+        return $this;
+    }
 }

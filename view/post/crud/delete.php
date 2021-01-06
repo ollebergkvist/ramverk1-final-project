@@ -14,7 +14,7 @@ $urlToView = url("admin");
 
 
 
-?><h1>Delete an item</h1>
+?><h1>Delete a post</h1>
 
 <?= $form ?>
 

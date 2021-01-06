@@ -8,6 +8,7 @@ use Olbe19\Post\HTMLForm\CreateForm;
 use Olbe19\Post\HTMLForm\DeleteForm;
 use Olbe19\Post\HTMLForm\UpdateForm;
 use Olbe19\DatabaseQuery\DataBaseQuery;
+use Olbe19\Filter\Markdown;
 
 /**
  * A sample controller to show how a controller class can be implemented.

@@ -32,4 +32,15 @@ class Tag extends ActiveRecordModel
 
         return $result;
     }
+
+
+    public function getTagById($value)
+    {
+        $where = "id";
+
+        return $this->find(
+            $where, 
+            $value, 
+        );
+    }
 }
