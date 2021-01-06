@@ -29,6 +29,7 @@ class UpdateForm extends FormModel
             [
                 "id" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                     "readonly" => true,
                     "value" => $post->id,
@@ -36,18 +37,21 @@ class UpdateForm extends FormModel
 
                 "content" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                     "value" => $post->content,
                 ],
 
                 "author" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                     "value" => $post->author,
                 ],
 
                 "submit" => [
                     "type" => "submit",
+                    "class" => "btn btn-primary btn-block",
                     "value" => "Save",
                     "callback" => [$this, "callbackSubmit"]
                 ],

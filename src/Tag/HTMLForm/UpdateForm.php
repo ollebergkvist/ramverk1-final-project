@@ -31,6 +31,7 @@ class UpdateForm extends FormModel
                     "type" => "text",
                     "class"        => "form-control",
                     "validation" => ["not_empty"],
+                    "class" => "form-control",
                     "readonly" => true,
                     "value" => $tag->id,
                 ],

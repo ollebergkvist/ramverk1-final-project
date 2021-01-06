@@ -30,24 +30,28 @@ class UpdateForm extends FormModel
                 "id" => [
                     "type" => "text",
                     "validation" => ["not_empty"],
+                    "class" => "form-control",
                     "readonly" => true,
                     "value" => $topic->id,
                 ],
 
                 "subject" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                     "value" => $topic->subject,
                 ],
 
                 "author" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                     "value" => $topic->author,
                 ],
 
                 "submit" => [
                     "type" => "submit",
+                    "class" => "btn btn-primary btn-block",
                     "value" => "Save",
                     "callback" => [$this, "callbackSubmit"]
                 ],

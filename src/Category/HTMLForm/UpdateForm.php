@@ -29,6 +29,7 @@ class UpdateForm extends FormModel
             [
                 "id" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                     "readonly" => true,
                     "value" => $category->id,
@@ -36,12 +37,14 @@ class UpdateForm extends FormModel
 
                 "name" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                     "value" => $category->name,
                 ],
 
                 "description" => [
                     "type" => "text",
+                    "class" => "form-control",
                     "validation" => ["not_empty"],
                     "value" => $category->description,
                 ],
