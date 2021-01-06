@@ -48,82 +48,88 @@ class UserController implements ContainerInjectableInterface
      * @return object as a response object
      */
     public function indexActionGet() : object
-    {
-        // General framework setup
-        $title = "Dashboard";
-        $email = $this->session->get("email");
+    {   
+        if(isset($_SESSION["permission"])) {
+            // General framework setup
+            $title = "User dashboard";
+            $email = $this->session->get("email");
 
-        // Validate and get gravatar
-        if ($this->gravatar->validate_gravatar($email)) {
-            $gravatarUrl = $this->gravatar->gravatar_image($email, 200);
+            // Validate and get gravatar
+            if ($this->gravatar->validate_gravatar($email)) {
+                $gravatarUrl = $this->gravatar->gravatar_image($email, 200);
+            }
+
+            // Data to send to view
+            $data = [
+                "id" => $this->session->get("id") ?? null,
+                "username" => $this->session->get("username") ?? null,
+                "email" => $email ?? null,
+                "password" => $this->session->get("password") ?? null,
+                "score" =>  $this->session->get("score") ?? null,
+                "level" => $this->session->get("level") ?? null,
+                "created" => $this->session->get("created") ?? null,
+                "gravatarUrl" => $gravatarUrl ?? null
+            ];
+
+            $this->page->add("user/dashboard", $data);
+
+            return $this->page->render([
+                "title" => $title,
+            ]);
         }
-
-        // Data to send to view
-        $data = [
-            "id" => $this->session->get("id") ?? null,
-            "username" => $this->session->get("username") ?? null,
-            "email" => $email ?? null,
-            "password" => $this->session->get("password") ?? null,
-            "score" =>  $this->session->get("score") ?? null,
-            "level" => $this->session->get("level") ?? null,
-            "created" => $this->session->get("created") ?? null,
-            "gravatarUrl" => $gravatarUrl ?? null
-        ];
-
-        $this->page->add("user/dashboard", $data);
-
-        return $this->page->render([
-            "title" => $title,
-        ]);
+        $this->di->get("response")->redirect("user/login");
     }
 
     public function showActionGet($author) : object
     {   
-        // General framework setup
-        $title = "Dashboard";
+        if(isset($_SESSION["permission"])) {
+            // General framework setup
+            $title = "User topics";
 
-        // Get all posts by author
-        $topics = $this->topic->getTopicsByAuthor($author);
+            // Get all posts by author
+            $topics = $this->topic->getTopicsByAuthor($author);
 
-        // Data to send to view
-        $result = [];
+            // Data to send to view
+            $result = [];
 
-        foreach ($topics as $key => $value) {
-            // SQL
-            $where = "Tag2Topic.topic = ?";
-            $value = $topics[$key]->id;
-            $table = "Tags";
-            $join = "Tags.id = Tag2Topic.tag";
-            $select = "Tag2Topic.*, Tags.name";
+            foreach ($topics as $key => $value) {
+                // SQL
+                $where = "Tag2Topic.topic = ?";
+                $value = $topics[$key]->id;
+                $table = "Tags";
+                $join = "Tags.id = Tag2Topic.tag";
+                $select = "Tag2Topic.*, Tags.name";
 
-            // Get tag names
-            $tags = $this->tag2topic->findAllWhereJoin(
-                $where, 
-                $value, 
-                $table, 
-                $join, 
-                $select 
-            );
+                // Get tag names
+                $tags = $this->tag2topic->findAllWhereJoin(
+                    $where, 
+                    $value, 
+                    $table, 
+                    $join, 
+                    $select 
+                );
 
-            // Push combined data to $result array
-            array_push($result,
-            [
-                "author" => $author,
-                "topic" => $topics[$key],
-                "tags" => $tags,
+                // Push combined data to $result array
+                array_push($result,
+                [
+                    "author" => $author,
+                    "topic" => $topics[$key],
+                    "tags" => $tags,
+                ]);
+            }
+
+            // Data to send to view
+            $data = [
+                "items" => $result,
+            ];
+
+            $this->page->add("user/view-all", $data);
+
+            return $this->page->render([
+                "title" => $title,
             ]);
         }
-
-        // Data to send to view
-        $data = [
-            "items" => $result,
-        ];
-
-        $this->page->add("user/view-all", $data);
-
-        return $this->page->render([
-            "title" => $title,
-        ]);
+        $this->di->get("response")->redirect("user/login");
     }
 
     /**

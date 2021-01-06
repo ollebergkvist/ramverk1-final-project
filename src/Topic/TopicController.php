@@ -44,7 +44,7 @@ class TopicController implements ContainerInjectableInterface
      */
     public function indexActionGet() : object
     {   
-        if (isset($_SESSION['username'])) {
+        if (isset($_SESSION["permission"])) {
             // Init topic and connect to db
             $topic = new Topic();
             $topic->setDb($this->di->get("dbqb"));
@@ -108,13 +108,12 @@ class TopicController implements ContainerInjectableInterface
      */
     public function viewAction(int $id) 
     {
-        if (isset($_SESSION['username'])) {
+        if (isset($_SESSION["permission"])) {
             $session = $this->di->get("session");
             $session->set("topicID", $id);
             $this->di->get("response")->redirect("post");
         }
-
-        // $this->di->get("response")->redirect("user/login");
+        $this->di->get("response")->redirect("user/login");
     }
 
     /**
@@ -124,7 +123,7 @@ class TopicController implements ContainerInjectableInterface
      */
     public function createAction() : object
     {
-        if (isset($_SESSION['username'])) {
+        if (isset($_SESSION["permission"])) {
             $page = $this->di->get("page");
             $form = new CreateForm($this->di);
             $form->check();

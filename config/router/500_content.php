@@ -7,7 +7,7 @@ return [
         [
             "info" => "Flat file content controller.",
             "mount" => null,
-            "handler" => "\Olbe19\Start\StartController",
+            "handler" => "\Anax\Content\FileBasedContentController",
         ],
     ]
 ];

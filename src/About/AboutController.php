@@ -19,7 +19,7 @@ class AboutController implements ContainerInjectableInterface
      */
     public function indexActionGet() : object
     {
-        if (isset($_SESSION['username'])) {
+        if (isset($_SESSION['permission'])) {
             $page = $this->di->get("page");
             $title = "About";
 

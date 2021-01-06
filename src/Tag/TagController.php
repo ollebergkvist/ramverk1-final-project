@@ -47,16 +47,19 @@ class TagController implements ContainerInjectableInterface
      * @return object as a response object
      */
     public function indexActionGet() : object
-    {
-        $this->page = $this->di->get("page");
+    {   
+        if (isset($_SESSION['permission'])) {
+            $this->page = $this->di->get("page");
 
-        $this->page->add("tag/view-all", [
-            "items" => $this->tag->findAll(),
-        ]);
+            $this->page->add("tag/view-all", [
+                "items" => $this->tag->findAll(),
+            ]);
 
-        return $this->page->render([
-            "title" => "Tags",
-        ]);
+            return $this->page->render([
+                "title" => "Tags",
+            ]);
+        }
+        $this->di->get("response")->redirect("user/login");
     }
 
     /**
@@ -66,54 +69,57 @@ class TagController implements ContainerInjectableInterface
      */
     public function viewActionGet($id) : object
     {   
-        // SQL
-        $where = "Tag2Topic.tag = ?";
-        $value = $id;
-        $table = "Topics";
-        $join = "Topics.id = Tag2Topic.topic";
-        $select = "Tag2Topic.tag, Topics.*";
+        if (isset($_SESSION['permission'])) {
+            // SQL
+            $where = "Tag2Topic.tag = ?";
+            $value = $id;
+            $table = "Topics";
+            $join = "Topics.id = Tag2Topic.topic";
+            $select = "Tag2Topic.tag, Topics.*";
 
-        $tagName = $this->tag->getTagById($id)->name;
+            $tagName = $this->tag->getTagById($id)->name;
 
-        // Get topics connected to a specific tag
-        $topicsInTag = $this->tag2topic->findAllWhereJoin(
-            $where, 
-            $value, 
-            $table, 
-            $join, 
-            $select 
-        );
+            // Get topics connected to a specific tag
+            $topicsInTag = $this->tag2topic->findAllWhereJoin(
+                $where, 
+                $value, 
+                $table, 
+                $join, 
+                $select 
+            );
 
-        // Result array
-        $result = [];
+            // Result array
+            $result = [];
 
-        foreach ($topicsInTag as $key => $value ) {
-            // Get number of posts of a topic
-            $nrOfPostsInTopic = $this->post->getNumberOfPostsOfTopic($topicsInTag[$key]->id);
+            foreach ($topicsInTag as $key => $value ) {
+                // Get number of posts of a topic
+                $nrOfPostsInTopic = $this->post->getNumberOfPostsOfTopic($topicsInTag[$key]->id);
 
-            // Get email of user
-            $email = $this->user->getEmailByName("celine");
-            
-            // Create gravatar
-            $gravatar = $this->gravatar->gravatar_image($email->email);
+                // Get email of user
+                $email = $this->user->getEmailByName("celine");
+                
+                // Create gravatar
+                $gravatar = $this->gravatar->gravatar_image($email->email);
 
-            // Push combined data to $result array
-            array_push($result,
-            [
-                "topic" => $topicsInTag[$key],
-                "gravatar" => $gravatar, 
-                "tagName" => $tagName,
-                "posts" => $nrOfPostsInTopic[0]->count,
+                // Push combined data to $result array
+                array_push($result,
+                [
+                    "topic" => $topicsInTag[$key],
+                    "gravatar" => $gravatar, 
+                    "tagName" => $tagName,
+                    "posts" => $nrOfPostsInTopic[0]->count,
+                ]);
+            }
+
+            $this->page->add("tag/view-topics-in-tag", [
+                "items" => $result,
+            ]);
+
+            return $this->page->render([
+                "title" => "Topics in tag",
             ]);
         }
-
-        $this->page->add("tag/view-topics-in-tag", [
-            "items" => $result,
-        ]);
-
-        return $this->page->render([
-            "title" => "Topics in tag",
-        ]);
+        $this->di->get("response")->redirect("user/login");
     }
 
     /**

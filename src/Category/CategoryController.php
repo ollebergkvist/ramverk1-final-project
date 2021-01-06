@@ -23,7 +23,7 @@ class CategoryController implements ContainerInjectableInterface
      */
     public function indexActionGet() : object
     {
-        if (isset($_SESSION['username'])) {
+        if (isset($_SESSION['permission'])) {
             $page = $this->di->get("page");
             $category = new Category();
             $category->setDb($this->di->get("dbqb"));
@@ -84,7 +84,7 @@ class CategoryController implements ContainerInjectableInterface
      */
     public function viewAction(int $id) 
     {
-        if (isset($_SESSION['username'])) {
+        if (isset($_SESSION['permission'])) {
             $session = $this->di->get("session");
             $session->set("categoryID", $id);
             $this->di->get("response")->redirect("topic");

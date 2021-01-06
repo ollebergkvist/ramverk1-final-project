@@ -24,7 +24,7 @@ class PostController implements ContainerInjectableInterface
      */
     public function indexActionGet() : object
     {
-        if (isset($_SESSION['username'])) {
+        if (isset($_SESSION['permission'])) {
             $session = $this->di->get("session");
             $value = $session->get("topicID");
             $where = "topic = ?";
@@ -41,7 +41,7 @@ class PostController implements ContainerInjectableInterface
                 "title" => "Forum | Posts"
             ]);
         }
-        // $this->di->get("response")->redirect("user/login");
+        $this->di->get("response")->redirect("user/login");
     }
 
     /**
@@ -51,7 +51,7 @@ class PostController implements ContainerInjectableInterface
      */
     public function createAction() : object
     {
-        if (isset($_SESSION['username'])) {
+        if (isset($_SESSION['permission'])) {
             $page = $this->di->get("page");
             $form = new CreateForm($this->di);
             $form->check();
