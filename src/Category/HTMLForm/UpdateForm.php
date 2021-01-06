@@ -24,11 +24,11 @@ class UpdateForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Update details of the item",
+                "legend" => "Update category",
             ],
             [
                 "id" => [
-                    "type" => "text",
+                    "type" => "hidden",
                     "class" => "form-control",
                     "validation" => ["not_empty"],
                     "readonly" => true,
@@ -58,6 +58,7 @@ class UpdateForm extends FormModel
 
                 "reset" => [
                     "type" => "reset",
+                    "class" => "btn btn-primary btn-block mt-1",
                 ],
             ]
         );
@@ -93,7 +94,7 @@ class UpdateForm extends FormModel
         $category = new Category();
         $category->setDb($this->di->get("dbqb"));
         $category->find("id", $this->form->value("id"));
-        $category->name = $this->form->value("content");
+        $category->name = $this->form->value("name");
         $category->description = $this->form->value("description");
         $category->save();
         return true;
@@ -101,16 +102,15 @@ class UpdateForm extends FormModel
 
 
 
-    // /**
-    //  * Callback what to do if the form was successfully submitted, this
-    //  * happen when the submit callback method returns true. This method
-    //  * can/should be implemented by the subclass for a different behaviour.
-    //  */
-    // public function callbackSuccess()
-    // {
-    //     $this->di->get("response")->redirect("book")->send();
-    //     //$this->di->get("response")->redirect("book/update/{$book->id}");
-    // }
+    /**
+     * Callback what to do if the form was successfully submitted, this
+     * happen when the submit callback method returns true. This method
+     * can/should be implemented by the subclass for a different behaviour.
+     */
+    public function callbackSuccess()
+    {
+        $this->di->get("response")->redirect("admin")->send();
+    }
 
 
 

@@ -10,7 +10,7 @@
 DROP TABLE IF EXISTS Categories;
 CREATE TABLE Categories (
     "id" INTEGER PRIMARY KEY NOT NULL,
-    "name" TEXT UNIQUE NOT NULL,
+    "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "topics" INTEGER
 );

@@ -3,7 +3,7 @@
  * Supply the basis for the navbar as an array.
  */
 
-if ($_SESSION['permission'] === "user") {
+if (isset($_SESSION['permission']) && $_SESSION['permission'] === "user") {
     return [
         // Use for styling the menu
         "wrapper" => null,
@@ -46,7 +46,7 @@ if ($_SESSION['permission'] === "user") {
     ];
 }
 
-if ($_SESSION['permission'] === "admin") {
+if (isset($_SESSION['permission']) && $_SESSION['permission'] === 'admin') {
     return [
         // Use for styling the menu
         "wrapper" => null,

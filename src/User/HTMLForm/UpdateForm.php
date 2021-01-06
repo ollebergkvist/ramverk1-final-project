@@ -17,26 +17,33 @@ class UpdateForm extends FormModel
      * @param Psr\Container\ContainerInterface $di a service container
      * @param integer             $id to update
      */
-    public function __construct(ContainerInterface $di, $id)
+    public function __construct(ContainerInterface $di)
     {
         parent::__construct($di);
-        $user = $this->getItemDetails($id);
+        $user = $this->getItemDetails();
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Update password",
+                "legend" => "Update user details",
             ],
             [
-                "id" => [
+                "username" => [
                     "type" => "text",
                     "class" => "form-control",
                     "validation" => ["not_empty"],
                     "readonly" => true,
-                    "value" => $user->id,
+                    "value" => $user->username,
+                ],
+
+                "email" => [
+                    "type" => "text",
+                    "class" => "form-control",
+                    "validation" => ["not_empty"],
+                    "value" => $user->email,
                 ],
 
                 "password" => [
-                    "type" => "text",
+                    "type" => "password",
                     "class" => "form-control",
                     "validation" => ["not_empty"],
                     "value" => $user->password,
@@ -51,29 +58,29 @@ class UpdateForm extends FormModel
 
                 "reset" => [
                     "type"      => "reset",
+                    "class" => "btn btn-primary btn-block mt-1",
                 ],
             ]
         );
     }
-
-
 
     /**
      * Get details on item to load form with.
      *
      * @param integer $id get details on item with id.
      *
-     * @return Post
+     * @return User
      */
-    public function getItemDetails($id) : object
-    {
-        $user = new Post();
+    public function getItemDetails() : object
+    {   
+        $session = $this->di->get("session");
+        $username = $session->get("username");
+        
+        $user = new User();
         $user->setDb($this->di->get("dbqb"));
-        $user->find("id", $id);
+        $user->find("username", $username);
         return $user;
     }
-
-
 
     /**
      * Callback for submit-button which should return true if it could
@@ -82,38 +89,36 @@ class UpdateForm extends FormModel
      * @return bool true if okey, false if something went wrong.
      */
     public function callbackSubmit() : bool
-    {
-        $user = new Post();
+    {   
+        $session = $this->di->get("session");
+        $username = $session->get("username");
+        $user = new User();
         $user->setDb($this->di->get("dbqb"));
-        $user->find("id", $this->form->value("id"));
-        $user->password = $this->form->value("password");
-        $user->save();
+        $user->find("username", $username);
+        $user->email = $this->form->value("email");
+        $user->setPassword($this->form->value("password"));
+        $user->save2();
         return true;
     }
 
+    /**
+     * Callback what to do if the form was successfully submitted, this
+     * happen when the submit callback method returns true. This method
+     * can/should be implemented by the subclass for a different behaviour.
+     */
+    public function callbackSuccess()
+    {
+        $this->di->get("response")->redirect("user")->send();
+    }
 
-
-    // /**
-    //  * Callback what to do if the form was successfully submitted, this
-    //  * happen when the submit callback method returns true. This method
-    //  * can/should be implemented by the subclass for a different behaviour.
-    //  */
-    // public function callbackSuccess()
-    // {
-    //     $this->di->get("response")->redirect("book")->send();
-    //     //$this->di->get("response")->redirect("book/update/{$book->id}");
-    // }
-
-
-
-    // /**
-    //  * Callback what to do if the form was unsuccessfully submitted, this
-    //  * happen when the submit callback method returns false or if validation
-    //  * fails. This method can/should be implemented by the subclass for a
-    //  * different behaviour.
-    //  */
-    // public function callbackFail()
-    // {
-    //     $this->di->get("response")->redirectSelf()->send();
-    // }
+    /**
+     * Callback what to do if the form was unsuccessfully submitted, this
+     * happen when the submit callback method returns false or if validation
+     * fails. This method can/should be implemented by the subclass for a
+     * different behaviour.
+     */
+    public function callbackFail()
+    {
+        $this->di->get("response")->redirectSelf()->send();
+    }
 }

@@ -17,7 +17,7 @@ $urlToView = url("topic");
 
 
 
-?><h1>Update an item</h1>
+?><h1>Update topic</h1>
 
 <?= $form ?>
 

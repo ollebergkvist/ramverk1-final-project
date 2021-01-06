@@ -183,8 +183,6 @@ class UserController implements ContainerInjectableInterface
      */
     public function createAction() : object
     {
-
-        if ($_SESSION['permission'] === "admin") {
             $form = new CreateUserForm($this->di);
             $form->check();
 
@@ -195,7 +193,6 @@ class UserController implements ContainerInjectableInterface
             return $this->page->render([
                 "title" => "Register account",
             ]);
-        }
     }
 
     /**
@@ -227,10 +224,10 @@ class UserController implements ContainerInjectableInterface
      *
      * @return object as a response object
      */
-    public function updateAction(int $id) : object
+    public function updateAction() : object
     {
         if (isset($_SESSION['username'])) {
-            $form = new UpdateForm($this->di, $id);
+            $form = new UpdateForm($this->di);
             $form->check();
 
             $this->page->add("user/crud/update", [

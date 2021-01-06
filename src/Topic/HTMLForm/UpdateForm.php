@@ -24,11 +24,11 @@ class UpdateForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Update details of the item",
+                "legend" => "Update details of topic",
             ],
             [
                 "id" => [
-                    "type" => "text",
+                    "type" => "hidden",
                     "validation" => ["not_empty"],
                     "class" => "form-control",
                     "readonly" => true,
@@ -45,6 +45,7 @@ class UpdateForm extends FormModel
                 "author" => [
                     "type" => "text",
                     "class" => "form-control",
+                    "readonly" => true,
                     "validation" => ["not_empty"],
                     "value" => $topic->author,
                 ],
@@ -58,12 +59,11 @@ class UpdateForm extends FormModel
 
                 "reset" => [
                     "type"      => "reset",
+                    "class" => "btn btn-primary btn-block mt-1",
                 ],
             ]
         );
     }
-
-
 
     /**
      * Get details on item to load form with.
@@ -79,8 +79,6 @@ class UpdateForm extends FormModel
         $topic->find("id", $id);
         return $topic;
     }
-
-
 
     /**
      * Callback for submit-button which should return true if it could
@@ -99,29 +97,24 @@ class UpdateForm extends FormModel
         return true;
     }
 
+    /**
+     * Callback what to do if the form was successfully submitted, this
+     * happen when the submit callback method returns true. This method
+     * can/should be implemented by the subclass for a different behaviour.
+     */
+    public function callbackSuccess()
+    {
+        $this->di->get("response")->redirect("admin")->send();
+    }
 
-
-    // /**
-    //  * Callback what to do if the form was successfully submitted, this
-    //  * happen when the submit callback method returns true. This method
-    //  * can/should be implemented by the subclass for a different behaviour.
-    //  */
-    // public function callbackSuccess()
-    // {
-    //     $this->di->get("response")->redirect("book")->send();
-    //     //$this->di->get("response")->redirect("book/update/{$book->id}");
-    // }
-
-
-
-    // /**
-    //  * Callback what to do if the form was unsuccessfully submitted, this
-    //  * happen when the submit callback method returns false or if validation
-    //  * fails. This method can/should be implemented by the subclass for a
-    //  * different behaviour.
-    //  */
-    // public function callbackFail()
-    // {
-    //     $this->di->get("response")->redirectSelf()->send();
-    // }
+    /**
+     * Callback what to do if the form was unsuccessfully submitted, this
+     * happen when the submit callback method returns false or if validation
+     * fails. This method can/should be implemented by the subclass for a
+     * different behaviour.
+     */
+    public function callbackFail()
+    {
+        $this->di->get("response")->redirectSelf()->send();
+    }
 }

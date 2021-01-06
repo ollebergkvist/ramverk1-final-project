@@ -5,9 +5,6 @@ namespace Anax\View;
 /**
  * View to display all posts.
  */
-// Show all incoming variables/functions
-//var_dump(get_defined_functions());
-//echo showEnvironment(get_defined_vars());
 
 // Gather incoming variables and use default values if not set
 $items = isset($items) ? $items : null;
@@ -15,8 +12,6 @@ $items = isset($items) ? $items : null;
 // Create urls for navigation
 $urlToCreate = url("post/create");
 $urlToDelete = url("post/delete");
-
-
 
 ?><h1>View all items</h1>
 
@@ -26,7 +21,7 @@ $urlToDelete = url("post/delete");
 </p>
 
 <?php if (!$items) : ?>
-    <p>There are no items to show.</p>
+<p>There are no items to show.</p>
 <?php
     return;
 endif;
@@ -43,7 +38,8 @@ endif;
     <?php foreach ($items as $item) : ?>
     <tr>
         <td>
-            <a href="<?= url("post/update/{$item->id}"); ?>"><?= $item->id ?></a>
+            <a
+                href="<?= url("post/update/{$item->id}"); ?>"><?= $item->id ?></a>
         </td>
         <td><?= $item->content ?></td>
         <td><?= $item->date ?></td>

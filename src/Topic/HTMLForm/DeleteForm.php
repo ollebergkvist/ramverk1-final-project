@@ -22,17 +22,19 @@ class DeleteForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Delete an item",
+                "legend" => "Delete a topic",
             ],
             [
                 "select" => [
                     "type"        => "select",
-                    "label"       => "Select item to delete:",
+                    "class" => "form-control",
+                    "label"       => "Select topic to delete:",
                     "options"     => $this->getAllItems(),
                 ],
 
                 "submit" => [
                     "type" => "submit",
+                    "class" => "btn btn-primary btn-block",
                     "value" => "Delete item",
                     "callback" => [$this, "callbackSubmit"]
                 ],
@@ -86,7 +88,7 @@ class DeleteForm extends FormModel
      */
     public function callbackSuccess()
     {
-        $this->di->get("response")->redirect("topic")->send();
+        $this->di->get("response")->redirect("admin")->send();
     }
 
 

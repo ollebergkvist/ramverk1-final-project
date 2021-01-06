@@ -27,24 +27,28 @@ class CreateUserForm extends FormModel
             [
                 "username" => [
                     "type"        => "text",
+                    "class"        => "form-control",
                     // "description" => "Here you can place a description.",
                     // "placeholder" => "you@domain.com",
                 ],
 
                 "email" => [
                     "type"        => "text",
+                    "class"        => "form-control",
                     // "description" => "Here you can place a description.",
                     // "placeholder" => "you@domain.com",
                 ],
 
                 "password" => [
                     "type"        => "password",
+                    "class"        => "form-control",
                     // "description" => "Here you can place a description.",
                     "placeholder" => "Must contain at least 6 characters",
                 ],
 
                 "password-again" => [
                     "type"        => "password",
+                    "class"        => "form-control",
                     "validation" => [
                         "match" => "password"
                     ],
@@ -52,6 +56,7 @@ class CreateUserForm extends FormModel
 
                 "submit" => [
                     "type" => "submit",
+                    "class"        => "btn btn-primary btn-block",
                     "value" => "Register",
                     "callback" => [$this, "callbackSubmit"]
                 ],
@@ -86,7 +91,10 @@ class CreateUserForm extends FormModel
         // Save to database (Active Record way)
         $user = new User(); // Create user
         $user->setDb($this->di->get("dbqb"));// Create connection between object and db
-        $user->created = $timestamp;
+        $user->created = $timestamp; // Save timestamp
+        $user->score = 0; // Save timestamp
+        $user->level = "NOOB"; // Save timestamp
+        $user->permission = "user"; // Save timestamp
         $user->username = $username; // Save username
         $user->email = $email; // Save email
         $user->setPassword($password); // Save password

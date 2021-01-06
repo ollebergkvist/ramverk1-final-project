@@ -14,8 +14,6 @@ $urlToCreate = url("topic/create");
 $urlToCategories = url("forum");
 $author = $items[0]["author"];
 
-
-
 ?><h1 class="text-center">Topics started by <?= $author ?></h1>
 
 <?php if (!$items) : ?>

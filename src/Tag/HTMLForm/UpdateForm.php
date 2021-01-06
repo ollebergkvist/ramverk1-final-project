@@ -24,11 +24,11 @@ class UpdateForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Update details of the item",
+                "legend" => "Update details of tag",
             ],
             [
                 "id" => [
-                    "type" => "text",
+                    "type" => "hidden",
                     "class"        => "form-control",
                     "validation" => ["not_empty"],
                     "class" => "form-control",
@@ -52,6 +52,7 @@ class UpdateForm extends FormModel
 
                 "reset" => [
                     "type"      => "reset",
+                    "class" => "btn btn-primary btn-block mt-1",
                 ],
             ]
         );

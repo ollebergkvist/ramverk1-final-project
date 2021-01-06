@@ -7,11 +7,11 @@
 --
 DROP TABLE IF EXISTS User;
 CREATE TABLE User (
-    "username" TEXT PRIMARY KEY UNIQUE NOT NULL,
-    "email" TEXT UNIQUE NOT NULL,
+    "username" TEXT PRIMARY KEY NOT NULL,
+    "email" TEXT NOT NULL,
     "password" TEXT,
     "score" INTEGER NOT NULL DEFAULT 0,
     "level" TEXT DEFAULT 'NOOB',
-    "permission" TEXT DEFAULT 'user',
-    "created" DATETIME,
+    "permission" TEXT NOT NULL DEFAULT 'user',
+    "created" DATETIME
 );

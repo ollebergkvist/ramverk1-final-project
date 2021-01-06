@@ -22,7 +22,7 @@ class DeleteForm extends FormModel
         $this->form->create(
             [
                 "id" => __CLASS__,
-                "legend" => "Delete an item",
+                "legend" => "Delete category",
             ],
             [
                 "select" => [

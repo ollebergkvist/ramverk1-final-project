@@ -2,8 +2,8 @@
 
 namespace Anax\View;
 
-$urlToDeleteAccount = "hej";
-$urlToEditAccount = "tjo";
+$urlToDeleteAccount = "user/delete";
+$urlToEditAccount = "user/update";
 $urlToAllPosts = "tjo";
 ?>
 

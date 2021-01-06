@@ -22,10 +22,10 @@ class User extends ActiveRecordModel
     public $username;
     public $email;
     public $password;
+    public $score;
+    public $level;
+    public $permission;
     public $created;
-    public $updated;
-    public $deleted;
-    public $active;
 
     /**
      * Set the password.
@@ -62,6 +62,18 @@ class User extends ActiveRecordModel
     public function getEmailByName($value): object
     {   
         $select = "email";
+        $where = "username = ?";
+
+        return $this->findWhere(
+            $where, 
+            $value, 
+            $select
+        );
+    }
+
+    public function getUserDetails($value): object
+    {   
+        $select = "*";
         $where = "username = ?";
 
         return $this->findWhere(
