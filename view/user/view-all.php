@@ -42,7 +42,7 @@ endif;
             <td>
                 <?php foreach ($item["tags"] as $tag) : ?>
                 <a class="btn btn-secondary btn-sm"
-                    href="<?= url("tag/view/{htmlentities($tag->id)}"); ?>"><?= $tag->name ?></a>
+                    href="<?= url("tag/view/{$tag->tag}"); ?>"><?= $tag->name ?></a>
                 <?php endforeach; ?>
             </td>
         </tr>
