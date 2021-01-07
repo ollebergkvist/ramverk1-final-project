@@ -8,8 +8,9 @@ namespace Anax\View;
 
 // Gather incoming variables and use default values if not set
 $items = isset($items) ? $items : null;
+$tagName = isset($items[0]["tagName"]) ? $items[0]["tagName"] : null;
 
-?><h1 class="text-center"><?= $items[0]["tagName"] ?></h1>
+?><h1 class="text-center"><?= $tagName ?></h1>
 
 <?php if (!$items) : ?>
 <p>There are no items to show.</p>
@@ -34,22 +35,23 @@ endif;
         <tr>
             <td>
                 <a
-                    href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= $item["topic"]->subject ?></a>
+                    href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= htmlentities($item["topic"]->subject) ?></a>
             </td>
-            <td><?= $item["topic"]->date ?></td>
+            <td><?= htmlentities($item["topic"]->date) ?></td>
             <td><a
-                    href="<?= url("user/show/{$item["topic"]->author}"); ?>"><?= $item["topic"]->author ?></a>
+                    href="<?= url("user/show/{$item["topic"]->author}"); ?>"><?= htmlentities($item["topic"]->author) ?></a>
             </td>
             <td>
-                <img src=" <?=$item["gravatar"] ?>">
+                <img src=" <?= htmlentities($item["gravatar"]) ?>">
             </td>
             <!-- <td>
                 <?php foreach ($item["tags"] as $tag) : ?>
                 <a class=" btn btn-secondary btn-sm"
-                    href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
+                    href="<?= url("tag/view/{$tag->id}"); ?>"><?= htmlentities($tag->name) ?></a>
                 <?php endforeach; ?>
             </td> -->
-            <td><i class="far fa-comment"></i> <?= $item["posts"] ?></td>
+            <td><i class="far fa-comment"></i>
+                <?= htmlentities($item["posts"]) ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

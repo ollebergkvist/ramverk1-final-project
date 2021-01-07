@@ -2,9 +2,9 @@
 
 namespace Anax\View;
 
-$urlToDeleteAccount = "user/delete";
+$urlToDeleteAccount = "user/remove";
 $urlToEditAccount = "user/update";
-$urlToAllPosts = "tjo";
+$urlToAllPosts = "user/show/{$username}";
 ?>
 
 <h1><?= htmlentities($username)?>'s dashboard</h1>

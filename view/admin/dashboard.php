@@ -30,7 +30,8 @@ $urlToDeleteUsers = url("user/delete");
     <a class="btn btn-secondary" href="<?= $urlToDeleteTopics ?>"><i
             class="far fa-trash-alt"></i> Delete topic</a>
 </p>
-<p><a class="btn btn-secondary" href="<?= $urlToEditPosts ?>"><i
+<p>
+    <a class="btn btn-secondary" href="<?= $urlToEditPosts ?>"><i
             class="far fa-edit"></i> Edit post</a>
     <a class="btn btn-secondary" href="<?= $urlToDeletePosts ?>"><i
             class="far fa-trash-alt"></i> Delete post</a>

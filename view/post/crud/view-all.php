@@ -38,11 +38,11 @@ endif;
     <?php foreach ($items as $item) : ?>
     <tr>
         <!-- <td>
-            <a href="<?= url("post/update/{$item->id}"); ?>"><?= $item->id ?></a>
+            <a href="<?= url("post/update/{$item->id}"); ?>"><?= htmlentities($item->id) ?></a>
         </td> -->
-        <td><?= $markdown->markdown($item->content); ?></td>
-        <td><?= $item->date ?></td>
-        <td><?= $item->author ?></td>
+        <td><?= $markdown->markdown(htmlentities($item->content)); ?></td>
+        <td><?= htmlentities($item->date) ?></td>
+        <td><?= htmlentities($item->author) ?></td>
     </tr>
     <?php endforeach; ?>
 </table>

@@ -12,7 +12,7 @@ $items = isset($items) ? $items : null;
 // Create urls for navigation
 $urlToCreate = url("topic/create");
 $urlToCategories = url("forum");
-$author = $items[0]["author"];
+$author = isset($items[0]["author"]) ? $items[0]["author"] : null;
 
 ?><h1 class="text-center">Topics started by <?= $author ?></h1>
 
@@ -36,13 +36,13 @@ endif;
         <tr>
             <td>
                 <a
-                    href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= $item["topic"]->subject?></a>
+                    href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= htmlentities($item["topic"]->subject) ?></a>
             </td>
-            <td><?= $item["topic"]->date ?></td>
+            <td><?= htmlentities($item["topic"]->date) ?></td>
             <td>
                 <?php foreach ($item["tags"] as $tag) : ?>
                 <a class="btn btn-secondary btn-sm"
-                    href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
+                    href="<?= url("tag/view/{htmlentities($tag->id)}"); ?>"><?= $tag->name ?></a>
                 <?php endforeach; ?>
             </td>
         </tr>

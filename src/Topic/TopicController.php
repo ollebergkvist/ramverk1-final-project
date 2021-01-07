@@ -113,7 +113,7 @@ class TopicController implements ContainerInjectableInterface
             $session->set("topicID", $id);
             $this->di->get("response")->redirect("post");
         }
-        $this->di->get("response")->redirect("user/login");
+        // $this->di->get("response")->redirect("user/login");
     }
 
     /**

@@ -10,6 +10,7 @@ use Olbe19\User\HTMLForm\UserLogoutForm;
 use Olbe19\User\HTMLForm\CreateUserForm;
 use Olbe19\User\HTMLForm\UpdateForm;
 use Olbe19\User\HTMLForm\DeleteForm;
+use Olbe19\User\HTMLForm\UserDeleteForm;
 use Olbe19\Topic\Topic;
 use Olbe19\Tag2Topic\Tag2Topic;
 
@@ -218,6 +219,28 @@ class UserController implements ContainerInjectableInterface
 
             return $this->page->render([
                 "title" => "Delete an item",
+            ]);
+        }
+        $this->di->get("response")->redirect("user/login");
+    }
+
+    /**
+     * Handler with form to delete an item.
+     *
+     * @return object as a response object
+     */
+    public function removeAction() : object
+    {
+        if ($_SESSION['permission'] === "user") {
+            $form = new UserDeleteForm($this->di);
+            $form->check();
+
+            $this->page->add("user/crud/remove", [
+                "form" => $form->getHTML(),
+            ]);
+
+            return $this->page->render([
+                "title" => "Delete account",
             ]);
         }
         $this->di->get("response")->redirect("user/login");

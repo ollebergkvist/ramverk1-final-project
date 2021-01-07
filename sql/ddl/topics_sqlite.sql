@@ -8,7 +8,6 @@ CREATE TABLE Topics (
     "date" DATETIME NOT NULL,
     "category" INTEGER NOT NULL,
     "author" TEXT NOT NULL,
-    "posts" INTEGER,
     FOREIGN KEY (category) REFERENCES Categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (author) REFERENCES User(username) ON DELETE RESTRICT ON UPDATE CASCADE
 );

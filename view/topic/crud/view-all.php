@@ -21,7 +21,6 @@ $urlToCategories = url("forum");
             class="fas fa-hand-point-left"></i> Categories</a>
     <a class="btn btn-secondary" href="<?= $urlToCreate ?>">Start a
         discussion</a>
-    <!-- <a href="<?= $urlToDelete ?>">Delete</a> -->
 </p>
 
 <?php if (!$items) : ?>
@@ -47,14 +46,14 @@ endif;
         <tr>
             <td>
                 <a
-                    href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= $item["topic"]->subject ?></a>
+                    href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= htmlentities($item["topic"]->subject) ?></a>
             </td>
-            <td><?= $item["topic"]->date ?></td>
+            <td><?= htmlentities($item["topic"]->date) ?></td>
             <td><a
-                    href="<?= url("user/show/{$item["topic"]->author}"); ?>"><?= $item["topic"]->author ?></a>
+                    href="<?= url("user/show/{$item["topic"]->author}"); ?>"><?= htmlentities($item["topic"]->author) ?></a>
             </td>
             <td>
-                <img src="<?=$item["gravatar"] ?>">
+                <img src="<?= htmlentities($item["gravatar"]) ?>">
             </td>
             <td>
                 <?php foreach ($item["tags"] as $tag) : ?>
@@ -62,7 +61,8 @@ endif;
                     href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
                 <?php endforeach; ?>
             </td>
-            <td><i class="far fa-comment"></i> <?= $item["posts"] ?></td>
+            <td><i class="far fa-comment"></i>
+                <?= htmlentities($item["posts"]) ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
