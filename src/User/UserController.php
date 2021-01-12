@@ -170,8 +170,8 @@ class UserController implements ContainerInjectableInterface
         $form = new UserLogoutForm($this->di);
         $form->check();
 
-        $this->page->add("anax/v2/article/default", [
-            "content" => $form->getHTML(),
+        $this->page->add("user/crud/logout", [
+            "form" => $form->getHTML(),
         ]);
 
         return $this->page->render([

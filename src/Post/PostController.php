@@ -114,4 +114,29 @@ class PostController implements ContainerInjectableInterface
         }
         $this->di->get("response")->redirect("user/login");
     }
+
+    /**
+     * Handler with form to update an item.
+     *
+     * @param int $id the id to update.
+     *
+     * @return object as a response object
+     */
+    public function editAction() : object
+    {
+        if ($_SESSION['permission'] === "admin") {
+            $post = new Post();
+            $post->setDb($this->di->get("dbqb"));
+            $page = $this->di->get("page");
+            
+            $page->add("post/crud/edit", [
+                "items" => $post->findAll(),
+            ]);
+
+            return $page->render([
+                "title" => "Posts",
+            ]);
+        }
+        $this->di->get("response")->redirect("user/login");
+    }
 }

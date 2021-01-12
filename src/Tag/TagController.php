@@ -130,15 +130,14 @@ class TagController implements ContainerInjectableInterface
     public function createAction() : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new CreateForm($this->di);
             $form->check();
 
-            $page->add("tag/crud/create", [
+            $this->page->add("tag/crud/create", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Create a item",
             ]);
         }
@@ -153,15 +152,14 @@ class TagController implements ContainerInjectableInterface
     public function deleteAction() : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new DeleteForm($this->di);
             $form->check();
 
-            $page->add("tag/crud/delete", [
+            $this->page->add("tag/crud/delete", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Delete an item",
             ]);
         }
@@ -178,16 +176,37 @@ class TagController implements ContainerInjectableInterface
     public function updateAction(int $id) : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new UpdateForm($this->di, $id);
             $form->check();
 
-            $page->add("tag/crud/update", [
+            $this->page->add("tag/crud/update", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Update an item",
+            ]);
+        }
+        $this->di->get("response")->redirect("user/login");
+    }
+
+    
+    /**
+     * Handler with form to update an item.
+     *
+     * @param int $id the id to update.
+     *
+     * @return object as a response object
+     */
+    public function editAction() : object
+    {
+        if ($_SESSION['permission'] === "admin") {
+            $this->page->add("tag/edit", [
+                "items" => $this->tag->findAll(),
+            ]);
+
+            return $this->page->render([
+                "title" => "Tags",
             ]);
         }
         $this->di->get("response")->redirect("user/login");

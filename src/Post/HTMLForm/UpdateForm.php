@@ -36,7 +36,7 @@ class UpdateForm extends FormModel
                 ],
 
                 "content" => [
-                    "type" => "text",
+                    "type" => "textarea",
                     "class" => "form-control",
                     "validation" => ["not_empty"],
                     "value" => $post->content,

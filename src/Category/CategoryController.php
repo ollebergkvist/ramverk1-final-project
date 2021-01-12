@@ -162,4 +162,29 @@ class CategoryController implements ContainerInjectableInterface
         }
         $this->di->get("response")->redirect("user/login");
     }
+
+    /**
+     * Handler with form to update an item.
+     *
+     * @param int $id the id to update.
+     *
+     * @return object as a response object
+     */
+    public function editAction() : object
+    {
+        if ($_SESSION['permission'] === "admin") {
+            $category = new Category();
+            $category->setDb($this->di->get("dbqb"));
+            $page = $this->di->get("page");
+            
+            $page->add("category/crud/edit", [
+                "items" => $category->findAll(),
+            ]);
+
+            return $page->render([
+                "title" => "Categories",
+            ]);
+        }
+        $this->di->get("response")->redirect("user/login");
+    }
 }

@@ -3,13 +3,13 @@
 namespace Anax\View;
 
 $urlToAddCategories = url("forum/create");
-$urlToEditCategories = url("forum/update");
+$urlToEditCategories = url("forum/edit");
 $urlToDeleteCategories = url("forum/delete");
-$urlToEditTopics = url("topic/update");
+$urlToEditTopics = url("topic/edit");
 $urlToDeleteTopics = url("topic/delete");
-$urlToEditPosts = url("post/update");
+$urlToEditPosts = url("post/edit");
 $urlToAddTags = url("tag/create");
-$urlToEditTags = url("tag/update");
+$urlToEditTags = url("tag/edit");
 $urlToDeleteTags = url("tag/delete");
 $urlToDeletePosts = url("post/delete");
 $urlToDeleteUsers = url("user/delete");

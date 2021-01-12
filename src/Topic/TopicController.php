@@ -27,7 +27,9 @@ class TopicController implements ContainerInjectableInterface
      * @return void
      */
     public function initialize(): void
-    {
+    {   
+        $this->topic = new Topic();
+        $this->topic->setDb($this->di->get("dbqb"));
         $this->post = new Post();
         $this->post->setDb($this->di->get("dbqb"));
         $this->tag2topic = new Tag2Topic();
@@ -45,15 +47,11 @@ class TopicController implements ContainerInjectableInterface
     public function indexActionGet() : object
     {   
         if (isset($_SESSION["permission"])) {
-            // Init topic and connect to db
-            $topic = new Topic();
-            $topic->setDb($this->di->get("dbqb"));
-
             // Get all topics in category
             $value = $this->session->get("categoryID");
             $where = "category = ?";
             $limit = "100";
-            $topicsInCategory = $topic->getTopicsAndUserDetails($value);
+            $topicsInCategory = $this->topic->getTopicsAndUserDetails($value);
 
             // Data to send to view
             $result = [];
@@ -124,15 +122,14 @@ class TopicController implements ContainerInjectableInterface
     public function createAction() : object
     {
         if (isset($_SESSION["permission"])) {
-            $page = $this->di->get("page");
             $form = new CreateForm($this->di);
             $form->check();
 
-            $page->add("topic/crud/create", [
+            $this->page->add("topic/crud/create", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Create a item",
             ]);
         }
@@ -147,15 +144,14 @@ class TopicController implements ContainerInjectableInterface
     public function deleteAction() : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new DeleteForm($this->di);
             $form->check();
 
-            $page->add("topic/crud/delete", [
+            $this->page->add("topic/crud/delete", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Delete an item",
             ]);
         }
@@ -172,16 +168,36 @@ class TopicController implements ContainerInjectableInterface
     public function updateAction(int $id) : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new UpdateForm($this->di, $id);
             $form->check();
 
-            $page->add("topic/crud/update", [
+            $this->page->add("topic/crud/update", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Update an item",
+            ]);
+        }
+        $this->di->get("response")->redirect("user/login");
+    }
+
+    /**
+     * Handler with form to update an item.
+     *
+     * @param int $id the id to update.
+     *
+     * @return object as a response object
+     */
+    public function editAction() : object
+    {
+        if ($_SESSION['permission'] === "admin") {
+            $this->page->add("topic/crud/edit", [
+                "items" => $this->topic->findAll(),
+            ]);
+
+            return $this->page->render([
+                "title" => "Topics",
             ]);
         }
         $this->di->get("response")->redirect("user/login");
