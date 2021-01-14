@@ -83,7 +83,7 @@ class Post extends ActiveRecordExtended
             }
             
             $this->calculatePoints($getVote);
-            $this->saveVote($postID, $username, $getVote, $di); // getVote är ett objekt, ej string, varför?
+            $this->saveVote($postID, $username, $getVote, $di); 
         } else {
             $this->calculatePoints($getVote);
             $this->saveVote($postID, $username, $getVote, $di);
@@ -94,19 +94,19 @@ class Post extends ActiveRecordExtended
     public function checkPriorVote($priorVote, $getVote, $postID, $username, $di)
     {
         if ($priorVote === "up-vote" && $getVote === "up-vote") {
-            $this->rank--;
+            $this->rank = $this->rank -1;
             $this->deleteVote($postID, $username, $di);
             $this->updateWhere("id = ?", $postID);
             return true;
         } else if ($priorVote === "down-vote" && $getVote === "down-vote") {
-            $this->rank++;
+            $this->rank = $this->rank +1;
             $this->deleteVote($postID, $username, $di);
             $this->updateWhere("id = ?", $postID);
             return true;
         } else if ($priorVote === "up-vote") {
-            $this->rank--;
+            $this->rank = $this->rank -1;
         } else if ($priorVote === "down-vote") {
-            $this->rank++;
+            $this->rank = $this->rank +1;
         }
         $this->updateWhere("id = ?", $postID);
         $this->deleteVote($postID, $username, $di);
@@ -117,11 +117,11 @@ class Post extends ActiveRecordExtended
         $arg = $getVote;
         
         if ($arg === "up-vote") {
-            $this->rank++;
+            $this->rank = $this->rank +1;
         } 
 
         elseif ($arg === "down-vote") {
-            $this->rank--;
+            $this->rank = $this->rank -1;
         }
     }
 
@@ -152,5 +152,24 @@ class Post extends ActiveRecordExtended
         $vote->setDb($di->get("dbqb"));
         $where = "post = ? AND user = ?";
         $vote->deleteWhere($where, [$postID, $username]);
+    }
+
+    public function findAllOrder($where, $value, $order): array
+    {   
+        $this->checkDb();
+        
+        $select = "Posts.*";
+        $table = "User";
+        $join = "User.username = Posts.author";
+        $params = [$value];
+        
+        return $this->db->connect()
+            ->select($select)
+            ->from($this->tableName)
+            ->where($where)
+            ->join($table, $join)
+            ->orderBy($order)
+            ->execute($params)
+            ->fetchAllClass(get_class($this));
     }
 }

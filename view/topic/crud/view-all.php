@@ -38,6 +38,7 @@ endif;
             <th>Author</th>
             <th>Gravatar</th>
             <th>Tags</th>
+            <th>Rank</th>
             <th>Posts</th>
         </tr>
     </thead>
@@ -61,6 +62,8 @@ endif;
                     href="<?= url("tag/view/{$tag->id}"); ?>"><?= $tag->name ?></a>
                 <?php endforeach; ?>
             </td>
+            <td><i class="far fa-star"></i>
+                <?= htmlentities($item["topic"]->rank) ?></td>
             <td><i class="far fa-comment"></i>
                 <?= htmlentities($item["posts"]) ?></td>
         </tr>

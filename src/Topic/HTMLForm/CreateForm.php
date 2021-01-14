@@ -104,6 +104,7 @@ class CreateForm extends FormModel
         $topic = new Topic();
         $topic->setDb($this->di->get("dbqb"));
         $topic->subject  = $this->form->value("subject");
+        $topic->content = $this->form->value("content");
         $topic->date = $timestamp;
         $topic->category = $this->form->value("category");
         $topic->author = $session->get("username");
@@ -111,13 +112,13 @@ class CreateForm extends FormModel
         $topicID = $topic->id;
 
         // Save post
-        $post = new Post();
-        $post->setDb($this->di->get("dbqb"));
-        $post->content = $this->form->value("content");
-        $post->date = $timestamp;
-        $post->topic = $topicID;
-        $post->author = $session->get("username");
-        $post->save();
+        // $post = new Post();
+        // $post->setDb($this->di->get("dbqb"));
+        // $post->content = $this->form->value("content");
+        // $post->date = $timestamp;
+        // $post->topic = $topicID;
+        // $post->author = $session->get("username");
+        // $post->save();
 
         // Save tag2topic
         $tag = new Tag();

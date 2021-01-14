@@ -60,6 +60,8 @@ class CreateForm extends FormModel
         $post->content = $this->form->value("content");
         $post->date = $timestamp;
         $post->topic = $topic; 
+        $post->rank = 0; 
+        $post->accepted = false; 
         $post->author = $session->get("username");
 
         $post->save();

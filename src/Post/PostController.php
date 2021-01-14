@@ -7,6 +7,7 @@ use Anax\Commons\ContainerInjectableTrait;
 use Olbe19\Post\HTMLForm\CreateForm;
 use Olbe19\Post\HTMLForm\DeleteForm;
 use Olbe19\Post\HTMLForm\UpdateForm;
+use Olbe19\Topic\Topic;
 use Olbe19\DatabaseQuery\DataBaseQuery;
 use Olbe19\Filter\Markdown;
 
@@ -28,6 +29,8 @@ class PostController implements ContainerInjectableInterface
     {   
         $this->post = new Post();
         $this->post->setDb($this->di->get("dbqb"));
+        $this->topic = new Topic();
+        $this->topic->setDb($this->di->get("dbqb"));
         $this->request = $this->di->get("request");
         $this->session = $this->di->get("session");
         $this->page = $this->di->get("page");
@@ -39,13 +42,17 @@ class PostController implements ContainerInjectableInterface
      * @return object as a response object
      */
     public function indexActionGet() : object
-    {
+    {   
         if (isset($_SESSION['permission'])) {
             $value = $this->session->get("topicID");
             $where = "topic = ?";
+            $where2 = "id = ?";
+
+            $order = $this->request->getGet("order") ?? "date";
 
             $this->page->add("post/crud/view-all", [
-                "items" => $this->post->findAllWhere($where, $value),
+                "items" => $this->post->findAllOrder($where, $value, $order),
+                "topic"=> $this->topic->findWhere($where2, $value),
             ]);
 
             return $this->page->render([

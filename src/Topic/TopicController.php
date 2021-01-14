@@ -37,6 +37,7 @@ class TopicController implements ContainerInjectableInterface
         $this->session = $this->di->get("session");
         $this->page = $this->di->get("page");
         $this->gravatar = new Gravatar;
+        $this->request = $this->di->get("request");
     }
 
     /**
@@ -199,5 +200,25 @@ class TopicController implements ContainerInjectableInterface
             ]);
         }
         $this->di->get("response")->redirect("user/login");
+    }
+
+    /**
+     * Vote on topic.
+     *
+     * @return object as a response object
+     */
+    public function voteAction()
+    {   
+        if (isset($_SESSION['permission'])) {
+            // Get data from form
+            $topicID = $this->request->getGet("topicID");
+            $getVote = $this->request->getGet("vote");
+            $username = $this->request->getGet("username");
+            
+            $this->topic->voteAnswer($topicID, $getVote, $username, $this->di);
+
+            $this->di->get("response")->redirect("post")->send();
+        }
+        // $this->di->get("response")->redirect("user/login");
     }
 }

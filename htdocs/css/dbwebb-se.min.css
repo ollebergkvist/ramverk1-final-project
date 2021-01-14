@@ -40,6 +40,10 @@ h1 {
 	text-transform: capitalize;
 }
 
+.buttons {
+	display: inline;
+}
+
 .rm-navbar {
 	position: fixed;
 	top: 0;

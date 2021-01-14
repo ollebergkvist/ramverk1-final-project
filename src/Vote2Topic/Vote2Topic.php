@@ -1,6 +1,6 @@
 <?php
 
-namespace Olbe19\Vote;
+namespace Olbe19\Vote2Topic;
 
 use Olbe19\ActiveRecordExtended\ActiveRecordExtended;
 // use Anax\DatabaseActiveRecord\ActiveRecordModel;
@@ -8,12 +8,12 @@ use Olbe19\ActiveRecordExtended\ActiveRecordExtended;
 /**
  * A database driven model using the Active Record design pattern.
  */
-class Vote extends ActiveRecordExtended
+class Vote2Topic extends ActiveRecordExtended
 {
     /**
      * @var string $tableName name of the database table.
      */
-    protected $tableName = "Vote";
+    protected $tableName = "Vote2Topic";
 
     /**
      * Columns in the table.
@@ -22,13 +22,13 @@ class Vote extends ActiveRecordExtended
      */
     public $id;
     public $user;
-    public $post;
+    public $topic;
     public $vote;
 
-    public function checkUserVote($postID, $username)
-    {   $where = "post = ? AND user = ?";
+    public function checkUserVote($topicID, $username)
+    {   $where = "topic = ? AND user = ?";
 
-        $result = $this->findWhere($where, [$postID, $username]);
+        $result = $this->findWhere($where, [$topicID, $username]);
         
         if ($result->id == null) {
             return false;
@@ -36,11 +36,11 @@ class Vote extends ActiveRecordExtended
         return true;
     }
 
-    public function getVote($postID, $username)
+    public function getVote($topicID, $username)
     {   
-        $where = "post = ? AND user = ?";
+        $where = "topic = ? AND user = ?";
         
-        $result = $this->findWhere($where, [$postID, $username]);
+        $result = $this->findWhere($where, [$topicID, $username]);
 
         return $result->vote;
     }
