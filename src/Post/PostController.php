@@ -52,7 +52,7 @@ class PostController implements ContainerInjectableInterface
 
             $this->page->add("post/crud/view-all", [
                 "items" => $this->post->findAllOrder($where, $value, $order),
-                "topic"=> $this->topic->findWhere($where2, $value),
+                "topic"=> $this->topic->findWhereJoin2($where2, "User", "User.username = Topics.author", $value, "Topics.*, User.email"),
             ]);
 
             return $this->page->render([

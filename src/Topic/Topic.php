@@ -106,7 +106,7 @@ class Topic extends ActiveRecordExtended
     }
 
 
-    public function findWhereJoin($where, $value, $select = "*") : object
+    public function findWhereJoin2($where, $joinTable, $joinOn, $value, $select = "*") : object
     {
         $this->checkDb();
         $params = is_array($value) ? $value : [$value];

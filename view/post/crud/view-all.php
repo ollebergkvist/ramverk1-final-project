@@ -6,6 +6,7 @@ namespace Anax\View;
 use Olbe19\Vote\Vote;
 use Olbe19\Vote2Topic\Vote2Topic;
 use Olbe19\Filter\Markdown;
+use Olbe19\Gravatar\Gravatar;
 
 /**
  * View to display all posts.
@@ -21,6 +22,7 @@ $urlToPostAccept = url("post/accept");
 $urlToVotePost = url("post/vote");
 $urlToVoteTopic = url("topic/vote");
 
+$gravatar = new Gravatar();
 $markdown = new Markdown();
 $vote = new Vote();
 $vote->setDb($di->get("dbqb"));
@@ -58,6 +60,7 @@ if ($username) {
         <th>Content</th>
         <th>Date</th>
         <th>Author</th>
+        <th>Gravatar</th>
         <th>Rank</th>
         <?php if ($username !== $topic->author): ?>
         <th>Up vote</th>
@@ -68,6 +71,8 @@ if ($username) {
         <td><?= $markdown->markdown(htmlentities($topic->content)); ?></td>
         <td><?= htmlentities($topic->date) ?></td>
         <td><?= htmlentities($topic->author) ?></td>
+        <td><img src="<?= $gravatar->gravatar_image(htmlentities($topic->email)) ?>"
+                alt=""></td>
         <td><?= htmlentities($topic->rank) ?></td>
         <?php if ($username !== $topic->author): ?>
         <td>
@@ -120,6 +125,7 @@ if ($username) {
         <th>Reply</th>
         <th>Date</th>
         <th>Author</th>
+        <th>Gravatar</th>
         <th>Rank</th>
         <th>Up vote</th>
         <th>Down vote</th>
@@ -144,6 +150,8 @@ if ($username) {
         <td><?= $markdown->markdown(htmlentities($item->content)); ?></td>
         <td><?= htmlentities($item->date) ?></td>
         <td><?= htmlentities($item->author) ?></td>
+        <td><img src="<?= $gravatar->gravatar_image(htmlentities($item->email)) ?>"
+                alt=""></td>
         <td><?= htmlentities($item->rank) ?></td>
         <td>
             <form action=<?= $urlToVotePost ?> method="get">

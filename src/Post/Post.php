@@ -158,7 +158,7 @@ class Post extends ActiveRecordExtended
     {   
         $this->checkDb();
         
-        $select = "Posts.*";
+        $select = "Posts.*, User.email";
         $table = "User";
         $join = "User.username = Posts.author";
         $params = [$value];
