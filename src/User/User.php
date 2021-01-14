@@ -2,12 +2,13 @@
 
 namespace Olbe19\User;
 
-use Anax\DatabaseActiveRecord\ActiveRecordModel;
+// use Anax\DatabaseActiveRecord\ActiveRecordModel;
+use Olbe19\ActiveRecordExtended\ActiveRecordExtended;
 
 /**
  * A database driven model.
  */
-class User extends ActiveRecordModel
+class User extends ActiveRecordExtended
 {
     /**
      * @var string $tableName name of the database table.
@@ -81,5 +82,25 @@ class User extends ActiveRecordModel
             $value, 
             $select
         );
+    }
+
+    public function getMostActiveUser($limit): array
+    {   
+        $order = "count(Posts.id) DESC";
+        $group = "User.username";
+        $table = "Posts";
+        $join = "User.username = Posts.author";
+        $select = "User.username, User.email, count(Posts.id)";
+
+        $topics = $this->findAllJoinOrderGroup(
+            $order, 
+            $group,
+            $table, 
+            $join, 
+            $limit, 
+            $select,
+        );
+
+        return $topics;
     }
 }

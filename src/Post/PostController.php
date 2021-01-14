@@ -18,6 +18,22 @@ class PostController implements ContainerInjectableInterface
     use ContainerInjectableTrait;
 
     /**
+     * The initialize method is optional and will always be called before the
+     * target method/action. This is a convenient method where you could
+     * setup internal properties that are commonly used by several methods.
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {   
+        $this->post = new Post();
+        $this->post->setDb($this->di->get("dbqb"));
+        $this->request = $this->di->get("request");
+        $this->session = $this->di->get("session");
+        $this->page = $this->di->get("page");
+    }
+
+    /**
      * Show all items.
      *
      * @return object as a response object
@@ -25,19 +41,14 @@ class PostController implements ContainerInjectableInterface
     public function indexActionGet() : object
     {
         if (isset($_SESSION['permission'])) {
-            $session = $this->di->get("session");
-            $value = $session->get("topicID");
+            $value = $this->session->get("topicID");
             $where = "topic = ?";
 
-            $page = $this->di->get("page");
-            $post = new Post();
-            $post->setDb($this->di->get("dbqb"));
-
-            $page->add("post/crud/view-all", [
-                "items" => $post->findAllWhere($where, $value),
+            $this->page->add("post/crud/view-all", [
+                "items" => $this->post->findAllWhere($where, $value),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Forum | Posts"
             ]);
         }
@@ -52,15 +63,14 @@ class PostController implements ContainerInjectableInterface
     public function createAction() : object
     {
         if (isset($_SESSION['permission'])) {
-            $page = $this->di->get("page");
             $form = new CreateForm($this->di);
             $form->check();
 
-            $page->add("post/crud/create", [
+            $this->page->add("post/crud/create", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Create a item",
             ]);
         }
@@ -75,15 +85,14 @@ class PostController implements ContainerInjectableInterface
     public function deleteAction() : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new DeleteForm($this->di);
             $form->check();
 
-            $page->add("post/crud/delete", [
+            $this->page->add("post/crud/delete", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Delete an item",
             ]);
         }
@@ -100,15 +109,14 @@ class PostController implements ContainerInjectableInterface
     public function updateAction(int $id) : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new UpdateForm($this->di, $id);
             $form->check();
 
-            $page->add("post/crud/update", [
+            $this->page->add("post/crud/update", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Update an item",
             ]);
         }
@@ -125,18 +133,57 @@ class PostController implements ContainerInjectableInterface
     public function editAction() : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $post = new Post();
-            $post->setDb($this->di->get("dbqb"));
-            $page = $this->di->get("page");
-            
-            $page->add("post/crud/edit", [
-                "items" => $post->findAll(),
+            $this->page->add("post/crud/edit", [
+                "items" => $this->post->findAll(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Posts",
             ]);
         }
         $this->di->get("response")->redirect("user/login");
+    }
+
+    /**
+     * Mark post as accepted.
+     *
+     * @return object as a response object
+     */
+    public function acceptAction()
+    {
+        if (isset($_SESSION['permission'])) {
+            // Get data from form
+            $username = $this->session->get("username");
+            $postID = $this->request->getGet("postID");
+
+            $this->post->findById($postID);
+
+            if ($this->post->author === $username) {
+                $this->post->acceptPost($postID);
+            }
+            
+            $this->di->get("response")->redirect("post")->send();
+        }
+        $this->di->get("response")->redirect("user/login");
+    }
+
+    /**
+     * Vote on post.
+     *
+     * @return object as a response object
+     */
+    public function voteAction()
+    {   
+        if (isset($_SESSION['permission'])) {
+            // Get data from form
+            $postID = $this->request->getGet("postID");
+            $getVote = $this->request->getGet("vote");
+            $username = $this->request->getGet("username");
+            
+            $this->post->voteAnswer($postID, $getVote, $username, $this->di);
+
+            $this->di->get("response")->redirect("post")->send();
+        }
+        // $this->di->get("response")->redirect("user/login");
     }
 }

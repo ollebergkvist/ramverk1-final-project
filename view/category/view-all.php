@@ -31,11 +31,11 @@ endif;
         <tr>
             <td>
                 <a
-                    href="<?= url("forum/view/{$item->id}"); ?>"><?= htmlentities($item->name) ?></a>
+                    href="<?= url("forum/view/{$item["category"]->id}"); ?>"><?= htmlentities($item["category"]->name) ?></a>
             </td>
-            <td><?= htmlentities($item->description) ?></td>
+            <td><?= htmlentities($item["category"]->description) ?></td>
             <td><i class="far fa-comment"></i>
-                <?= htmlentities($item->topics) ?></td>
+                <?= htmlentities($item["posts"]) ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

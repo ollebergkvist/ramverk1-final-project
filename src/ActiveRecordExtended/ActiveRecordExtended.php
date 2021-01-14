@@ -78,4 +78,31 @@ class ActiveRecordExtended extends ActiveRecordModel
             ->execute($params)
             ->fetchAllClass(get_class($this));
     }
+
+    public function findAllJoinOrder($order, $table, $join, $limit, $select)
+    {
+        $this->checkDb();
+        return $this->db->connect()
+            ->select($select)
+            ->from($this->tableName)
+            ->orderBy($order)
+            ->join($table, $join)
+            ->limit($limit)
+            ->execute()
+            ->fetchAllClass(get_class($this));
+    }
+
+    public function findAllJoinOrderGroup($order, $group, $table, $join, $limit = 10000, $select = "*")
+    {
+        $this->checkDb();
+        return $this->db->connect()
+            ->select($select)
+            ->from($this->tableName)
+            ->groupBy($group)
+            ->orderBy($order)
+            ->join($table, $join)
+            ->limit($limit)
+            ->execute()
+            ->fetchAllClass(get_class($this));
+    }
 }

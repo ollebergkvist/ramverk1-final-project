@@ -7,6 +7,7 @@ use Anax\Commons\ContainerInjectableTrait;
 use Olbe19\Category\HTMLForm\CreateForm;
 use Olbe19\Category\HTMLForm\DeleteForm;
 use Olbe19\Category\HTMLForm\UpdateForm;
+use Olbe19\Topic\Topic;
 use Anax\DatabaseQueryBuilder\DatabaseQueryBuilder;
 
 /**
@@ -17,6 +18,23 @@ class CategoryController implements ContainerInjectableInterface
     use ContainerInjectableTrait;
 
     /**
+     * The initialize method is optional and will always be called before the
+     * target method/action. This is a convenient method where you could
+     * setup internal properties that are commonly used by several methods.
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {   
+        $this->category = new Category();
+        $this->category->setDb($this->di->get("dbqb"));
+        $this->topic = new Topic();
+        $this->topic->setDb($this->di->get("dbqb"));
+        $this->session = $this->di->get("session");
+        $this->page = $this->di->get("page");
+    }
+
+    /**
      * Show all items.
      *
      * @return object as a response object
@@ -24,51 +42,31 @@ class CategoryController implements ContainerInjectableInterface
     public function indexActionGet() : object
     {
         if (isset($_SESSION['permission'])) {
-            $page = $this->di->get("page");
-            $category = new Category();
-            $category->setDb($this->di->get("dbqb"));
-            
-            // Count number of categories
-            $sql = "SELECT COUNT(*) AS categories FROM Categories";
-            $param = ["1"];
-            $db = $this->di->get("dbqb");
-            $db->connect();
-            $res = $db->executeFetch($sql);
-            $categories = $res->categories;
-            $number = range(1, $categories);
 
-            // Get number of topics in each category
-            $sql = "SELECT COUNT(*) AS nroftopics FROM Topics WHERE category = ?";
-            $db = $this->di->get("dbqb");
-            $topicsArray = [];
-            
-            foreach ($number as $item) {
-                $param = [];
-                array_push($param, $item);
-                $db->connect();
-                $res = $db->executeFetch($sql, $param);
-                $nrOfTopics = $res->nroftopics;
-                array_push($topicsArray, $nrOfTopics);
+            // Get all categories from db
+            $categories = $this->category->findAll();
+
+            // Data to send to view
+            $result = [];
+
+            foreach ($categories as $key => $value) {
+                // Get number of topics in each category
+                $topics = $this->topic->getNumberOfTopicsInCategory($categories[$key]->id);
+
+                // Push combined data to $result array
+                array_push($result,
+                [
+                    "category" => $categories[$key],
+                    "posts" => $topics[0]->count,
+                ]);
+
             }
 
-            // Insert number of topics into categories
-            $sql = "UPDATE Categories SET topics = ? WHERE id = ?";
-            $db = $this->di->get("dbqb");
-            $index = 1;
-
-            foreach ($topicsArray as $item) {
-                $params = [];
-                array_push($params, $item, $index);
-                $db->connect();
-                $res = $db->execute($sql, $params);
-                $index++;
-            }
-
-            $page->add("category/view-all", [
-                "items" => $category->findAll(),
+            $this->page->add("category/view-all", [
+                "items" => $result,
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Categories",
             ]);
         }
@@ -100,15 +98,14 @@ class CategoryController implements ContainerInjectableInterface
     public function createAction() : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new CreateForm($this->di);
             $form->check();
 
-            $page->add("category/crud/create", [
+            $this->page->add("category/crud/create", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Create a category",
             ]);
         }
@@ -123,15 +120,14 @@ class CategoryController implements ContainerInjectableInterface
     public function deleteAction() : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new DeleteForm($this->di);
             $form->check();
 
-            $page->add("category/crud/delete", [
+            $this->page->add("category/crud/delete", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Delete an item",
             ]);
         }
@@ -148,15 +144,14 @@ class CategoryController implements ContainerInjectableInterface
     public function updateAction(int $id) : object
     {
         if ($_SESSION['permission'] === "admin") {
-            $page = $this->di->get("page");
             $form = new UpdateForm($this->di, $id);
             $form->check();
 
-            $page->add("category/crud/update", [
+            $this->page->add("category/crud/update", [
                 "form" => $form->getHTML(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Update an item",
             ]);
         }
@@ -175,13 +170,12 @@ class CategoryController implements ContainerInjectableInterface
         if ($_SESSION['permission'] === "admin") {
             $category = new Category();
             $category->setDb($this->di->get("dbqb"));
-            $page = $this->di->get("page");
             
-            $page->add("category/crud/edit", [
+            $this->page->add("category/crud/edit", [
                 "items" => $category->findAll(),
             ]);
 
-            return $page->render([
+            return $this->page->render([
                 "title" => "Categories",
             ]);
         }

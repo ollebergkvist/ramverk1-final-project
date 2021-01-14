@@ -2,8 +2,8 @@
 
 namespace Olbe19\Post;
 
-// use Anax\DatabaseActiveRecord\ActiveRecordModel;
 use Olbe19\ActiveRecordExtended\ActiveRecordExtended;
+use Olbe19\Vote\Vote;
 
 /**
  * A database driven model using the Active Record design pattern.
@@ -25,6 +25,8 @@ class Post extends ActiveRecordExtended
     public $date;
     public $topic;
     public $author;
+    public $rank;
+    public $accepted;
 
     public function getNumberOfPostsOfTopic($where): array
     {
@@ -46,5 +48,109 @@ class Post extends ActiveRecordExtended
             $where, 
             $value, 
         );
+    }
+
+    public function acceptPost($postID)
+    {
+        $post = $this->findById($postID); 
+        $this->id = $post->id;
+        $this->accepted = true;
+        return $this->updateWhere("id = ?", $postID);
+    }
+
+    public function voteAnswer($postID, $getVote, $username, $di)
+    {
+        $vote = new Vote();
+        $vote->setDb($di->get("dbqb"));
+
+        $vote->post = $postID;
+        $vote->user = $username;
+        $vote->vote = $getVote;
+
+        $ifVoted = $vote->checkUserVote($postID, $username);
+
+        $post = $this->findById($postID);
+        $this->savePost($post);
+
+        if ($ifVoted) {
+            $where = "post = ? AND user = ?";
+            $fetch = $vote->findWhere($where, [$postID, $username]);
+            
+            $priorVote = $fetch->vote;
+
+            if ($this->checkPriorVote($priorVote, $getVote, $postID, $username, $di)) {
+                return;
+            }
+            
+            $this->calculatePoints($getVote);
+            $this->saveVote($postID, $username, $getVote, $di); // getVote är ett objekt, ej string, varför?
+        } else {
+            $this->calculatePoints($getVote);
+            $this->saveVote($postID, $username, $getVote, $di);
+        }
+        return $this->updateWhere("id = ?", $postID);
+    }
+
+    public function checkPriorVote($priorVote, $getVote, $postID, $username, $di)
+    {
+        if ($priorVote === "up-vote" && $getVote === "up-vote") {
+            $this->rank--;
+            $this->deleteVote($postID, $username, $di);
+            $this->updateWhere("id = ?", $postID);
+            return true;
+        } else if ($priorVote === "down-vote" && $getVote === "down-vote") {
+            $this->rank++;
+            $this->deleteVote($postID, $username, $di);
+            $this->updateWhere("id = ?", $postID);
+            return true;
+        } else if ($priorVote === "up-vote") {
+            $this->rank--;
+        } else if ($priorVote === "down-vote") {
+            $this->rank++;
+        }
+        $this->updateWhere("id = ?", $postID);
+        $this->deleteVote($postID, $username, $di);
+    }
+
+    public function calculatePoints($getVote)
+    {   
+        $arg = $getVote;
+        
+        if ($arg === "up-vote") {
+            $this->rank++;
+        } 
+
+        elseif ($arg === "down-vote") {
+            $this->rank--;
+        }
+    }
+
+    public function savePost($post)
+    {   
+        $this->id = $post->id;
+        $this->content = $post->content;
+        $this->date = $post->date;
+        $this->topic = $post->topic;
+        $this->author = $post->author;
+        $this->rank = $post->rank;
+        $this->accepted = $post->accepted;
+    }
+
+    public function saveVote($postID, $username, $getVote, $di)
+    {   
+        $vote = new Vote();
+        $vote->setDb($di->get("dbqb"));
+        $vote->user = $username;
+        $vote->post = $postID;
+        $vote->vote = $getVote;
+        $vote->save();
+    }
+
+    public function deleteVote($postID, $username, $di)
+    {
+        $vote = new Vote();
+        $vote->setDb($di->get("dbqb"));
+        $where = "post = ? AND user = ?";
+        $vote->deleteWhere($where, [$postID, $username]);
     }
 }

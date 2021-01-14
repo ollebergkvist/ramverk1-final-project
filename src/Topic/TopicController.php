@@ -49,8 +49,6 @@ class TopicController implements ContainerInjectableInterface
         if (isset($_SESSION["permission"])) {
             // Get all topics in category
             $value = $this->session->get("categoryID");
-            $where = "category = ?";
-            $limit = "100";
             $topicsInCategory = $this->topic->getTopicsAndUserDetails($value);
 
             // Data to send to view

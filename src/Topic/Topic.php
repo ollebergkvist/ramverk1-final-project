@@ -45,12 +45,11 @@ class Topic extends ActiveRecordExtended
         );
     }
 
-    public function getTopicsAndUserDetails($value): array
+    public function getTopicsAndUserDetails($value, $limit = "1000"): array
     {   
         $order = "date DESC";
         $table = "User";
         $join = "Topics.author = User.username";
-        $limit = "1000";
         $select = "Topics.*, User.username, User.email";
 
         $topics = $this->findAllWhereJoinOrder(
@@ -58,6 +57,26 @@ class Topic extends ActiveRecordExtended
             $table, 
             $join, 
             $value,
+            $limit, 
+            $select,
+        );
+
+        return $topics;
+    }
+
+    public function getTopicsAndUserDetails2($limit): array
+    {   
+        $order = "date DESC";
+        $group = "Topics.date";
+        $table = "User";
+        $join = "Topics.author = User.username";
+        $select = "Topics.*, User.username, User.email";
+
+        $topics = $this->findAllJoinOrderGroup(
+            $order, 
+            $group,
+            $table, 
+            $join, 
             $limit, 
             $select,
         );
@@ -98,5 +117,17 @@ class Topic extends ActiveRecordExtended
                     ->execute($params)
                     ->fetchInto($this);
         return $this;
+    }
+
+    public function getNumberOfTopicsInCategory($where): array
+    {
+        $select = "category = ?";
+        $count = "count(*) as count";
+
+        return $this->findAllWhere(
+            $select, 
+            $where, 
+            $count
+        );
     }
 }

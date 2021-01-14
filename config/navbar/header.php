@@ -14,8 +14,8 @@ if (isset($_SESSION['permission']) && $_SESSION['permission'] === "user") {
             [
                 "text" => "<i class='fas fa-hat-wizard'></i> <span class='code'>Code</span>Wizards",
                 "class" => "logotype",
-                "url" => "forum",
-                "title" => "Forum.",
+                "url" => "home",
+                "title" => "Home.",
             ],
             [
                 "text" => "<i class='fas fa-comments'></i> Forum",
@@ -55,10 +55,10 @@ if (isset($_SESSION['permission']) && $_SESSION['permission'] === 'admin') {
         // Here comes the menu items
         "items" => [
             [
-                "text" => "<i class='fas fa-hat-wizard'></i> CodeWizards",
+                "text" => "<i class='fas fa-hat-wizard'></i> <span class='code'>Code</span>Wizards",
                 "class" => "logotype",
-                "url" => "forum",
-                "title" => "Forum.",
+                "url" => "home",
+                "title" => "Home.",
             ],
             [
                 "text" => "<i class='fas fa-comments'></i> Forum",
@@ -97,10 +97,10 @@ return [
     // Here comes the menu items
     "items" => [
         [
-            "text" => "<i class='fas fa-hat-wizard'></i> CodeWizards",
+            "text" => "<i class='fas fa-hat-wizard'></i> <span class='code'>Code</span>Wizards",
             "class" => "logotype",
-            "url" => "forum",
-            "title" => "Forum.",
+            "url" => "home",
+            "title" => "Home.",
         ],
         [
             "text" => "Register",
