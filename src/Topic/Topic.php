@@ -227,4 +227,16 @@ class Topic extends ActiveRecordExtended
         $where = "topic = ? AND user = ?";
         $vote2topic->deleteWhere($where, [$topicID, $username]);
     }
+
+    public function getPoints($where): array
+    {
+        $topic = "author= ?";
+        $count = "SUM(rank) as sum";
+
+        return $this->findAllWhere(
+            $topic, 
+            $where, 
+            $count
+        );
+    }
 }

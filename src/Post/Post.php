@@ -40,6 +40,18 @@ class Post extends ActiveRecordExtended
         );
     }
 
+    public function getPoints($where): array
+    {
+        $topic = "author = ?";
+        $count = "SUM(rank) as sum";
+
+        return $this->findAllWhere(
+            $topic, 
+            $where, 
+            $count
+        );
+    }
+
     public function getPostsByAuthor($value): array
     {
         $where = "author = ?";

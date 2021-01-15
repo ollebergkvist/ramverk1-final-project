@@ -84,6 +84,30 @@ class User extends ActiveRecordExtended
         );
     }
 
+    public function getUserPoints($value): object
+    {   
+        $select = "User.username, User.score";
+        $where = "username = ?";
+
+        return $this->findWhere(
+            $where, 
+            $value, 
+            $select
+        );
+    }
+
+    public function savePoints($value)
+    {   
+        $select = "*";
+        $where = "username = ?";
+
+        return $this->UpdateWhere(
+            $where, 
+            $value, 
+            $select
+        );
+    }
+
     public function getMostActiveUser($limit): array
     {   
         $order = "count(Posts.id) DESC";

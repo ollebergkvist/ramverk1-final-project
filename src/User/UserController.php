@@ -13,6 +13,7 @@ use Olbe19\User\HTMLForm\DeleteForm;
 use Olbe19\User\HTMLForm\UserDeleteForm;
 use Olbe19\Topic\Topic;
 use Olbe19\Tag2Topic\Tag2Topic;
+use Olbe19\Post\Post;
 
 /**
  * A sample controller to show how a controller class can be implemented.
@@ -29,7 +30,11 @@ class UserController implements ContainerInjectableInterface
      * @return void
      */
     public function initialize(): void
-    {
+    {   
+        $this->user = new User();
+        $this->user->setDb($this->di->get("dbqb"));
+        $this->post = new Post();
+        $this->post->setDb($this->di->get("dbqb"));
         $this->topic = new Topic();
         $this->topic->setDb($this->di->get("dbqb"));
         $this->tag2topic = new Tag2Topic();
@@ -85,13 +90,33 @@ class UserController implements ContainerInjectableInterface
     {   
         if(isset($_SESSION["permission"])) {
             // General framework setup
-            $title = "User topics";
+            $title = "User activity";
 
             // Get all posts by author
             $topics = $this->topic->getTopicsByAuthor($author);
 
             // Data to send to view
             $result = [];
+
+            $userScore = $this->user->getUserDetails($author)->score;
+            $postsScore = $this->post->getPoints("$author")[0]->sum;
+            $topicsScore = $this->topic->getPoints($author)[0]->sum;
+
+            $totalScore = $userScore + $postsScore + $topicsScore;
+
+            $level = "";
+            
+            if ($totalScore == 0 ) {
+                $level = "beginner";
+            } elseif ($totalScore >= 1 && $totalScore <= 3 ) {
+                $level = "student";
+            } elseif ($totalScore > 3 && $totalScore <= 5 ) {
+                $level = "teacher";
+            } elseif ($totalScore > 5 && $totalScore <= 10 ) {
+                $level = "pro";
+            } elseif ($totalScore > 10) {
+                $level = "master";
+            }
 
             foreach ($topics as $key => $value) {
                 // SQL
@@ -122,6 +147,8 @@ class UserController implements ContainerInjectableInterface
             // Data to send to view
             $data = [
                 "items" => $result,
+                "score" => $totalScore,
+                "level" => $level
             ];
 
             $this->page->add("user/view-all", $data);

@@ -9,6 +9,7 @@ use Olbe19\Tag\Tag;
 use Olbe19\Topic\Topic;
 use Olbe19\Post\Post;
 use Olbe19\Tag2Topic\Tag2Topic;
+use Olbe19\User\User;
 
 /**
  * Form to create an item.
@@ -133,6 +134,14 @@ class CreateForm extends FormModel
             $tag2topic->topic = $topicID;
             $tag2topic->save();
         }
+
+        // Save user points
+        $where = "username = ?";
+        $user = new User();
+        $user->setDb($this->di->get("dbqb"));
+        $user->findWhere($where, [$session->get("username")]);
+        $user->score = $user->score + 1;
+        $user->savePoints($session->get("username"));
         
         return true;
     }
