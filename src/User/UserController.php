@@ -14,6 +14,8 @@ use Olbe19\User\HTMLForm\UserDeleteForm;
 use Olbe19\Topic\Topic;
 use Olbe19\Tag2Topic\Tag2Topic;
 use Olbe19\Post\Post;
+use Olbe19\Vote\Vote;
+use Olbe19\Vote2Topic\Vote2Topic;
 
 /**
  * A sample controller to show how a controller class can be implemented.
@@ -42,6 +44,10 @@ class UserController implements ContainerInjectableInterface
         $this->gravatar = new Gravatar();
         $this->page = $this->di->get("page");
         $this->session = $this->di->get("session");
+        $this->vote = new Vote();
+        $this->vote->setDb($this->di->get("dbqb"));
+        $this->vote2topic = new Vote2Topic();
+        $this->vote2topic->setDb($this->di->get("dbqb"));
     }
 
     /**
@@ -59,6 +65,10 @@ class UserController implements ContainerInjectableInterface
             // General framework setup
             $title = "User dashboard";
             $email = $this->session->get("email");
+            $username = $this->session->get("username");
+
+            // Get user from db
+            $user = $this->user->getUserDetails($username);
 
             // Validate and get gravatar
             if ($this->gravatar->validate_gravatar($email)) {
@@ -67,13 +77,13 @@ class UserController implements ContainerInjectableInterface
 
             // Data to send to view
             $data = [
-                "id" => $this->session->get("id") ?? null,
-                "username" => $this->session->get("username") ?? null,
-                "email" => $email ?? null,
-                "password" => $this->session->get("password") ?? null,
-                "score" =>  $this->session->get("score") ?? null,
-                "level" => $this->session->get("level") ?? null,
-                "created" => $this->session->get("created") ?? null,
+                "id" => $user->id ?? null,
+                "username" => $user->username ?? null,
+                "email" => $user->email ?? null,
+                "password" => $user->password ?? null,
+                "score" =>  $user->score ?? null,
+                "level" => $user->level ?? null,
+                "created" => $user->created ?? null,
                 "gravatarUrl" => $gravatarUrl ?? null
             ];
 
@@ -92,17 +102,23 @@ class UserController implements ContainerInjectableInterface
             // General framework setup
             $title = "User activity";
 
-            // Get all posts by author
+            // Get all topics by author
             $topics = $this->topic->getTopicsByAuthor($author);
+
+            // Get all posts by author
+            $posts = $this->post->getPostsByAuthor($author);
 
             // Data to send to view
             $result = [];
 
             $userScore = $this->user->getUserDetails($author)->score;
-            $postsScore = $this->post->getPoints("$author")[0]->sum;
+            $postsScore = $this->post->getPoints($author)[0]->sum;
             $topicsScore = $this->topic->getPoints($author)[0]->sum;
-
             $totalScore = $userScore + $postsScore + $topicsScore;
+
+            $topicsUserVotes = $this->vote2topic->getUserVotes($author)->count;
+            $postsUserVotes = $this->vote->getUserVotes($author)->count;
+            $totalVotes = $topicsUserVotes + $postsUserVotes;
 
             $level = "";
             
@@ -147,8 +163,10 @@ class UserController implements ContainerInjectableInterface
             // Data to send to view
             $data = [
                 "items" => $result,
+                "items2" => $posts,
                 "score" => $totalScore,
-                "level" => $level
+                "level" => $level,
+                "votes" => $totalVotes
             ];
 
             $this->page->add("user/view-all", $data);

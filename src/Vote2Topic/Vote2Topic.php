@@ -44,4 +44,16 @@ class Vote2Topic extends ActiveRecordExtended
 
         return $result->vote;
     }
+
+    public function getUserVotes($value): object
+    {   
+        $select = "count(user) as count";
+        $where = "user = ?";
+
+        return $this->findWhere(
+            $where, 
+            $value, 
+            $select
+        );
+    }
 }

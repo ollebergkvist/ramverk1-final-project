@@ -99,8 +99,8 @@ return [
         [
             "text" => "<i class='fas fa-hat-wizard'></i> <span class='code'>Code</span>Wizards",
             "class" => "logotype",
-            "url" => "home",
-            "title" => "Home.",
+            "url" => "user/login",
+            "title" => "Login.",
         ],
         [
             "text" => "Register",

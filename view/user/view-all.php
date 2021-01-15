@@ -16,9 +16,9 @@ $author = isset($items[0]["author"]) ? $items[0]["author"] : null;
 
 ?>
 <h1 class="text-center"><?= $author ?> Activity </h1>
-<h4>Level: <?= $level ?></h4>
+<h4>Reputation: <?= $level ?></h4>
 <h4>Points: <?= $score ?></h4>
-<h4>Total Votes: <?= $score ?></h4>
+<h4>Total Votes: <?= $votes ?></h4>
 
 <h1 class="text-center">Topics</h1>
 
@@ -68,25 +68,18 @@ endif;
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>Subject</th>
+            <th>Content</th>
             <th>Date</th>
-            <th>Tags</th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($items as $item) : ?>
+        <?php foreach ($items2 as $item) : ?>
         <tr>
             <td>
                 <a
-                    href="<?= url("topic/view/{$item["topic"]->id}"); ?>"><?= htmlentities($item["topic"]->subject) ?></a>
+                    href="<?= url("topic/view/{$item->topic}"); ?>"><?= htmlentities($item->content) ?></a>
             </td>
-            <td><?= htmlentities($item["topic"]->date) ?></td>
-            <td>
-                <?php foreach ($item["tags"] as $tag) : ?>
-                <a class="btn btn-secondary btn-sm"
-                    href="<?= url("tag/view/{$tag->tag}"); ?>"><?= $tag->name ?></a>
-                <?php endforeach; ?>
-            </td>
+            <td><?= htmlentities($item->date) ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
