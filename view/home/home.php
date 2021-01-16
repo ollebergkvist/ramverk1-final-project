@@ -72,7 +72,6 @@ namespace Anax\View;
         <tr>
             <th>Username</th>
             <th>Gravatar</th>
-            <th>Points</th>
         </tr>
     </thead>
     <tbody>

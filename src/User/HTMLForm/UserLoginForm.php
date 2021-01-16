@@ -105,7 +105,7 @@ class UserLoginForm extends FormModel
             $session->set("created", $created);
             $session->set("permission", $permission);
 
-            $this->di->get("response")->redirect("forum");
+            $this->di->get("response")->redirect("home");
         }
     }
 }

@@ -13,6 +13,8 @@ sqlite3 data/db.sqlite < sql/ddl/topics_sqlite.sql
 sqlite3 data/db.sqlite < sql/ddl/posts_sqlite.sql
 sqlite3 data/db.sqlite < sql/ddl/tags_sqlite.sql
 sqlite3 data/db.sqlite < sql/ddl/tag2topic_sqlite.sql
+sqlite3 data/db.sqlite < sql/ddl/vote_sqlite.sql
+sqlite3 data/db.sqlite < sql/ddl/vote2topic_sqlite.sql
 
 echo "Inserting default table data..."
 # Inserting data into tables

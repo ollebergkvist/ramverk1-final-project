@@ -6,7 +6,7 @@ return [
     "routes" => [
         [
             "info" => "Controller for start.",
-            "mount" => null,
+            "mount" => "start",
             "handler" => "\Olbe19\Start\StartController",
         ],
     ]

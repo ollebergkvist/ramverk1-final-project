@@ -8,7 +8,6 @@
 font-family: 'Source Sans Pro', sans-serif; */
 
 html {
-	height: 100%;
 	background: rgb(252, 114, 121);
 	background: linear-gradient(
 		to top right,
@@ -16,6 +15,7 @@ html {
 		rgba(255, 123, 156, 1) 65%,
 		rgba(255, 192, 25, 1) 125%
 	);
+	height: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -34,6 +34,7 @@ html {
 body,
 a {
 	font-family: 'Poppins', sans-serif !important;
+	padding: 2em;
 }
 
 h1 {
@@ -75,10 +76,15 @@ ul {
 	list-style-type: none;
 }
 
-main {
-	border-radius: 100px !important;
-	padding: 2rem !important;
-	width: 1200px !important;
+.route-home {
+	margin-top: 40em;
+}
+.route-about {
+	width: 1200px;
+}
+
+.route-post {
+	margin-top: 40em;
 }
 
 .htmlform {

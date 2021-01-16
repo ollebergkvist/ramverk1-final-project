@@ -2,8 +2,8 @@
 -- Table Topics
 --
 
-INSERT INTO Topics (id, subject, date, category, author)
+INSERT INTO Topics (id, subject, content, date, category, author)
 VALUES
-    ("1", "Javascript Loop", "2021-01-02 09:59:32", "1", "celine"),
-    ("2", "PHP Foreach", "2021-01-02 06:60:02", "1", "celine"),
-    ("3", "301 redirect for html page", "2021-01-03 07:55:31", "1", "celine");
+    ("1", "Javascript Loop", "test", "2021-01-02 09:59:32", "1", "admin"),
+    ("2", "PHP Foreach", "test", "2021-01-02 06:60:02", "1", "admin"),
+    ("3", "301 redirect for html page", "test", "2021-01-03 07:55:31", "1", "admin");

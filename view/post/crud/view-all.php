@@ -62,10 +62,8 @@ if ($username) {
         <th>Author</th>
         <th>Gravatar</th>
         <th>Rank</th>
-        <?php if ($username !== $topic->author): ?>
         <th>Up vote</th>
         <th>Down vote</th>
-        <?php endif;?>
     </thead>
     <tr>
         <td><?= $markdown->markdown(htmlentities($topic->content)); ?></td>
@@ -74,8 +72,8 @@ if ($username) {
         <td><img src="<?= $gravatar->gravatar_image(htmlentities($topic->email)) ?>"
                 alt=""></td>
         <td><?= htmlentities($topic->rank) ?></td>
-        <?php if ($username !== $topic->author): ?>
         <td>
+            <?php if ($username !== $topic->author): ?>
             <form action=<?= $urlToVoteTopic ?> method="get">
                 <input hidden name="username" value="<?= $username ?>">
                 <input hidden name="topicID" value="<?= $topic->id ?>">
@@ -85,10 +83,13 @@ if ($username) {
                         class="far fa-arrow-alt-circle-up <?= $successColor ?>"></i>
                 </button>
             </form>
+            <?php else : ?>
+            <button class="btn btn-block shadow-none"><i
+                    class="far fa-arrow-alt-circle-down"></i></button>
+            <?php endif;?>
         </td>
-        <?php endif;?>
-        <?php if ($username !== $topic->author): ?>
         <td>
+            <?php if ($username !== $topic->author): ?>
             <form action=<?= $urlToVoteTopic ?> method="get">
                 <input hidden name="username" value="<?= $username ?>">
                 <input hidden name="topicID" value="<?= $topic->id ?>">
@@ -98,8 +99,11 @@ if ($username) {
                         class="far fa-arrow-alt-circle-down <?= $dangerColor ?>"></i>
                 </button>
             </form>
+            <?php else : ?>
+            <button class="btn btn-block shadow-none"><i
+                    class="far fa-arrow-alt-circle-down"></i></button>
+            <?php endif;?>
         </td>
-        <?php endif;?>
     </tr>
 </table>
 
@@ -110,12 +114,14 @@ if ($username) {
 <h2 class="text-center">Replies</h2>
 <h4>Order by</h4>
 <form class="buttons" action=<?= url("post") ?> method="get">
-    <button class="btn btn-secondary" type="submit" name="order" value="date">
+    <button class="btn btn-secondary" type="submit" name="order"
+        value="date desc">
         Date
     </button>
 </form>
 <form class="buttons" action=<?= url("post") ?> method="get">
-    <button class="btn btn-secondary" type="submit" name="order" value="rank">
+    <button class="btn btn-secondary" type="submit" name="order"
+        value="rank desc">
         Rank
     </button>
 </form>
@@ -154,6 +160,7 @@ if ($username) {
                 alt=""></td>
         <td><?= htmlentities($item->rank) ?></td>
         <td>
+            <?php if ($username !== $item->author): ?>
             <form action=<?= $urlToVotePost ?> method="get">
                 <input hidden name="username" value="<?= $username ?>">
                 <input hidden name="postID" value="<?= $item->id ?>">
@@ -163,8 +170,13 @@ if ($username) {
                         class="far fa-arrow-alt-circle-up <?= $successColorPost ?>"></i>
                 </button>
             </form>
+            <?php else : ?>
+            <button class="btn btn-block shadow-none"><i
+                    class="far fa-arrow-alt-circle-down"></i></button>
+            <?php endif;?>
         </td>
         <td>
+            <?php if ($username !== $item->author): ?>
             <form action=<?= $urlToVotePost ?> method="get">
                 <input hidden name="username" value="<?= $username ?>">
                 <input hidden name="postID" value="<?= $item->id ?>">
@@ -174,12 +186,16 @@ if ($username) {
                         class="far fa-arrow-alt-circle-down <?= $dangerColorPost ?>"></i>
                 </button>
             </form>
+            <?php else : ?>
+            <button class="btn btn-block shadow-none"><i
+                    class="far fa-arrow-alt-circle-down"></i></button>
+            <?php endif;?>
         </td>
         <td>
             <?php if ($item->accepted == 1): ?>
             <button class="btn btn-block shadow-none"><i
                     class="far fa-check-square text-primary"></i></button>
-            <?php elseif ($username == $item->author): ?>
+            <?php elseif ($username == $topic->author): ?>
             <form action=<?= $urlToPostAccept ?> method="get">
                 <input hidden name="username" value="<?= $username ?>">
                 <input hidden name="postID" value="<?= $item->id ?>">
@@ -187,6 +203,9 @@ if ($username) {
                     <i class="far fa-check-square"></i>
                 </button>
             </form>
+            <?php else : ?>
+            <button class="btn btn-block shadow-none"><i
+                    class="far fa-check-square"></i></button>
             <?php endif;?>
         </td>
     </tr>

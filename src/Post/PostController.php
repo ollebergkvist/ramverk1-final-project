@@ -165,13 +165,13 @@ class PostController implements ContainerInjectableInterface
 
             $this->post->findById($postID);
 
-            if ($this->post->author === $username) {
+            if ($this->post->author !== $username) {
                 $this->post->acceptPost($postID);
             }
             
             $this->di->get("response")->redirect("post")->send();
         }
-        $this->di->get("response")->redirect("user/login");
+        // $this->di->get("response")->redirect("user/login");
     }
 
     /**
