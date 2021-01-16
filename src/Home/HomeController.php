@@ -51,64 +51,67 @@ class HomeController implements ContainerInjectableInterface
      */
     public function indexActionGet(): object
     {   
-        $nrOfItems = 3;
-        $latestTopics = $this->topic->getTopicsAndUserDetails2($nrOfItems);
-        $popularTags = $this->tag2topic->getMostPopularTags($nrOfItems);
-        $mostActiveUsers = $this->user->getMostActiveUser($nrOfItems);
+        if (isset($_SESSION['username'])) {
+            $nrOfItems = 3;
+            $latestTopics = $this->topic->getTopicsAndUserDetails2($nrOfItems);
+            $popularTags = $this->tag2topic->getMostPopularTags($nrOfItems);
+            $mostActiveUsers = $this->user->getMostActiveUser($nrOfItems);
 
-        // Array to send to view
-        $result = [];
+            // Array to send to view
+            $result = [];
 
-        foreach ($latestTopics as $key => $value) {
-            // SQL
-            $where = "Tag2Topic.topic = ?";
-            $value = $latestTopics[$key]->id;
-            $table = "Tags";
-            $join = "Tags.id = Tag2Topic.tag";
-            $select = "Tag2Topic.*, Tags.name";
+            foreach ($latestTopics as $key => $value) {
+                // SQL
+                $where = "Tag2Topic.topic = ?";
+                $value = $latestTopics[$key]->id;
+                $table = "Tags";
+                $join = "Tags.id = Tag2Topic.tag";
+                $select = "Tag2Topic.*, Tags.name";
 
-             // Get tag names
-            $tags = $this->tag2topic->findAllWhereJoin(
-                $where, 
-                $value, 
-                $table, 
-                $join, 
-                $select 
-            );
+                // Get tag names
+                $tags = $this->tag2topic->findAllWhereJoin(
+                    $where, 
+                    $value, 
+                    $table, 
+                    $join, 
+                    $select 
+                );
 
-            // Get number of posts of a topic
-            $nrOfPostsInTopic = $this->post->getNumberOfPostsOfTopic($latestTopics[$key]->id);
+                // Get number of posts of a topic
+                $nrOfPostsInTopic = $this->post->getNumberOfPostsOfTopic($latestTopics[$key]->id);
 
-            // Push combined data to $result array
-            array_push($result,
-            [
-                "topic" => $latestTopics[$key],
-                "gravatar" => $this->gravatar->gravatar_image($latestTopics[$key]->email), 
-                "tags" => $tags,
-                "posts" => $nrOfPostsInTopic[0]->count,
+                // Push combined data to $result array
+                array_push($result,
+                [
+                    "topic" => $latestTopics[$key],
+                    "gravatar" => $this->gravatar->gravatar_image($latestTopics[$key]->email), 
+                    "tags" => $tags,
+                    "posts" => $nrOfPostsInTopic[0]->count,
+                ]);
+            }
+
+            // Array to send to view
+            $result2 = [];
+
+            foreach ($mostActiveUsers as $key => $value) {
+                // Push combined data to $result array
+                array_push($result2,
+                [
+                    "user" => $mostActiveUsers[$key],
+                    "gravatar" => $this->gravatar->gravatar_image($mostActiveUsers[$key]->email), 
+                ]);
+            }
+            
+            $this->page->add("home/home", [
+                "popularTopics" => $result,
+                "popularTags" => $popularTags,
+                "mostActiveUsers" => $result2,
+            ]);
+
+            return $this->page->render([
+                "title" => "Home",
             ]);
         }
-
-        // Array to send to view
-        $result2 = [];
-
-        foreach ($mostActiveUsers as $key => $value) {
-            // Push combined data to $result array
-            array_push($result2,
-            [
-                "user" => $mostActiveUsers[$key],
-                "gravatar" => $this->gravatar->gravatar_image($mostActiveUsers[$key]->email), 
-            ]);
-        }
-        
-        $this->page->add("home/home", [
-            "popularTopics" => $result,
-            "popularTags" => $popularTags,
-            "mostActiveUsers" => $result2,
-        ]);
-
-        return $this->page->render([
-            "title" => "Home",
-        ]);
+        $this->di->get("response")->redirect("user/login");
     }
 }
